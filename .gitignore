@@ -1,0 +1,9 @@
+# Rid of the pycache
+__pycache__
+
+# HIDE THE .ENV AAAAAAAAA
+.env
+
+# Please dont track the dbs plz :)
+users
+guilds

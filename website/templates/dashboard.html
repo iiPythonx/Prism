@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block account %}
+
+    <ul class = "navbar-nav ml-auto">
+        <li class = "nav-item dropdown">
+
+            {% if user %}
+
+                <a class = "nav-link dropdown-toggle" id = "account" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false">
+                    <img src = "{{ user['avatar'] }}" style = "height: 25px;"> {{ user["username"] }}<small style = "color: grey;">#{{ user["discriminator"] }}</small>
+                </a>
+                <div class = "dropdown-menu dropdown-menu-right" aria-labelledby = "account">
+                    <a class = "dropdown-item" href = "/manage">Manage Servers</a>
+                    <div class = "dropdown-divider"></div>
+                    <a class = "dropdown-item" href = "/logout" style = "color: red !important;">
+                        <i class = "fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+
+            {% else %}
+
+                <a class = "nav-link" role = "button" href = "/discord/auth">
+                    
+                    <i class="fas fa-sign-in-alt"></i> Login with Discord
+                    
+                </a>
+
+            {% endif %}
+
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block content %}
+
+    {% if not guild %}
+
+        <div id = "content" align = "center">
+
+            <div style = "margin-top: 5%; padding-bottom: 35px;">
+                
+                {% for guild in guilds %}
+
+                    <div style = "width: 500px; height: 50px; position: relative;">
+                    
+                        {% if guilds[guild]["icon"] %}
+
+                            <img src = "https://cdn.discordapp.com/icons/{{ guilds[guild]['id'] }}/{{ guilds[guild]['icon'] }}.png" style = "max-height: 48px; max-width: 89px; padding-right: 15px; float: left;">
+
+                        {% else %}
+
+                            <img src = "/static/img/no_image.gif" style = "max-height: 48px; max-width: 89px; padding-right: 15px; float: left;">
+
+                        {% endif %}
+
+                        <h5 style = "padding-left: 60px; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">
+                            
+                            {% if guilds[guild]["name"]|length > 32 %}
+
+                                Name is too long
+
+                            {% else %}
+
+                                {{ guilds[guild]["name"] }}
+                        
+                            {% endif %}
+
+                        </h5>
+
+                        <div style = "padding-left: 280px;">
+
+                            {% if not guilds[guild]["in_server"] %}
+
+                                <a style = "position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%); cursor: pointer; width: 103.11px;" onclick = "window.open(`https://discord.com/oauth2/authorize?client_id=685550504276787200&permissions=8&scope=bot&guild_id={{ guilds[guild]['id'] }}`,'popUpWindow','height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');" class = "btn btn-outline-dark">Invite</a>
+
+                            {% else %}
+
+                                <a style = "position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);" href = "/manage/{{ guilds[guild]['id'] }}" class = "btn btn-outline-warning">Dashboard</a>
+                            
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <!--
+                    <a style = "border-style: solid;" {% if not guilds[guild]["in_server"] %} onclick = "window.open(`https://discord.com/oauth2/authorize?client_id=685550504276787200&permissions=8&scope=bot&guild_id={{ guilds[guild]['id'] }}`,'popUpWindow','height=500,width=400,left=100,top=100,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes');" {% else %} href = "/manage/{{ guilds[guild]['id'] }}" {% endif %} style = "width: 500px; cursor: pointer;">
+
+                        <img style = "float: left; height: 30px;" src = "https://cdn.discordapp.com/icons/{{ guilds[guild]['id'] }}/{{ guilds[guild]['icon'] }}.png" alt = "{{ guilds[guild]['name'] }} Icon">
+
+                        <h5 style = "float: left; color: white;">{{ guilds[guild]["name"] }}</h5>
+
+                        <a href = "" style = "border-style: solid;" class = "btn btn-outline-{% if not guilds[guild]['in_server'] %}success{% else %}warning{% endif %}">
+
+                            {% if not guilds[guild]["in_server"] %}
+
+                                Invite Prism
+
+                            {% else %}
+
+                                Dashboard
+
+                            {% endif %}
+
+                        </a>
+
+                    </a>
+                -->
+
+                    <div style = "padding-top: 50px;"></div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    {% else %}
+
+        <a href = "https://discord.com/oauth2/authorize?client_id=685550504276787200&permissions=8&scope=bot" class = "btn btn-outline-dark">
+            
+            <i class = "fab fa-discord"></i> Add to Discord
+        
+        </a>
+
+        <a href = "/manage" class = "btn btn-outline-dark">
+            
+            <i class = "fas fa-tools"></i> Manage Servers
+        
+        </a>
+
+    {% endif %}
+
+{% endblock %}

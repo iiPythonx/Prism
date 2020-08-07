@@ -1,0 +1,15 @@
+body {
+    background-color: #126bf1 !important;
+}
+
+nav {
+    background-color: white !important;
+}
+
+nav .navbar-nav li a{
+    color: black !important;
+}
+
+main {
+    padding-left: 10px;
+}

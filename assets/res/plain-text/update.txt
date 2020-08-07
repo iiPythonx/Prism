@@ -1,0 +1,4 @@
+{
+    "jumpurl": "https://discordapp.com/channels/729513002302177311/729760209223942165/735974931254345819",
+    "content": "-clear 4"
+}
