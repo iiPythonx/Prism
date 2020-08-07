@@ -17,8 +17,7 @@ class Changelog(commands.Cog):
     @commands.command(aliases = ["version", "cl", "updates", "update"])
     async def changelog(self, ctx):
  
-        latest_update = json.loads(open("assets/res/update.txt", 
-        "r").read())
+        latest_update = json.loads(open("assets/res/plain-text/update.txt", "r").read())
 
         if ctx.author in self.bot.get_guild(729513002302177311).members:
 
