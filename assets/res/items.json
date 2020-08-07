@@ -1,0 +1,71 @@
+{
+  "1": {
+    "name": ":canned_food: Prism Cola",
+    "price": 2,
+    "sell_price": 1,
+    "tags": [],
+    "cat": "consumables"
+  },
+  "2": {
+    "name": ":cookie: Cookie",
+    "price": 2,
+    "sell_price": 1,
+    "tags": [],
+    "cat": "consumables"
+  },
+  "3": {
+    "name": ":pizza: Pizza Slice",
+    "price": 5,
+    "sell_price": 1,
+    "tags": [],
+    "cat": "consumables"
+  },
+  "4": {
+    "name": ":hotdog: Hotdog",
+    "price": 500,
+    "sell_price": 475,
+    "tags": [],
+    "cat": "consumables"
+  },
+  "11": {
+    "name": ":lock: Default Bank Lock",
+    "price": 5000,
+    "sell_price": 0,
+    "tags": [
+      "duration-259200",
+      "banklock"
+    ],
+    "cat": "protection"
+  },
+  "12": {
+    "name": ":closed_lock_with_key: Exclusive Bank Lock",
+    "price": 7000,
+    "sell_price": 0,
+    "tags": [
+      "duration-259200",
+      "banklock"
+    ],
+    "cat": "protection"
+  },
+  "13": {
+    "name": "<:premium_banklock:737018890617356338> Premium Bank Lock",
+    "price": 7000,
+    "sell_price": 0,
+    "tags": [
+      "duration-64281600",
+      "banklock",
+      "premium"
+    ],
+    "cat": "protection"
+  },
+  "21": {
+    "name": ":alarm_clock: Cooldown Repellent",
+    "price": 7500,
+    "sell_price": 0,
+    "tags": [
+      "duration-604800",
+      "non-stackable"
+    ],
+    "cat": "resources"
+  }
+}
