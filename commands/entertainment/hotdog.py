@@ -32,6 +32,10 @@ class Hotdog(commands.Cog):
 
         db = loads(open("db/users", "r").read())
 
+        if not str(user.id) in db:
+
+            return await ctx.send(embed = Tools.error("Yea they don't have an account lmao"))
+
         _user = db[str(ctx.author.id)]
 
         __user = db[str(user.id)]

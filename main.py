@@ -1,7 +1,7 @@
 # Prism Discord Bot - Rewrite Edition
 # The only bot you will ever need.
 
-# Last revision: June 12th, 2020.
+# Last revision: August 7th, 2020.
 # Copyright 2020-20xx MIT; Benjamin O'Brien.
 
 
@@ -49,7 +49,7 @@ async def on_message(msg):
 
   if await Events.on_message(msg) != True:
         
-      return
+    return
     
   return await bot.process_commands(msg)
 

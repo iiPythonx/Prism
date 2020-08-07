@@ -39,7 +39,21 @@ class Buy(commands.Cog):
 
       return await ctx.send(embed = Tools.error("You need premium to purchase that."))
 
-    elif "banklock" in item["tags"]:
+    elif ":" in item["name"]:
+
+      if ">" in item["name"]:
+
+        item["name"] = item["name"].split(">")[1]
+
+      else:
+
+        item["name"] = item["name"].split(":")[2]
+
+      if item["name"].startswith(" "):
+
+        item["name"] = item["name"][1:]
+        
+    if "banklock" in item["tags"]:
 
       if amount > 1:
 
