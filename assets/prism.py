@@ -157,6 +157,10 @@ class Events:
 
       return
 
+    if message.content in gdb[str(message.guild.id)]["data"]["triggers"]:
+
+      await ctx.send(gdb[str(message.guild.id)]["data"]["triggers"][message.content])
+
     # Leveling
     if str(message.author.id) in db:
 
@@ -433,7 +437,7 @@ class Tools:
 
   def error(text):
 
-    embed = discord.Embed(description = f"<:rename_it:730915977742778368> \t **{text}**", color = 0xff0000)
+    embed = discord.Embed(description = f":x: \t **{text}**", color = 0xff0000)
 
     return embed
 
@@ -543,7 +547,8 @@ class Constants:
       "joinleave_channel": None,
       "deleted_messages": [],
       "last_updated": "Never",
-      "autorole": None
+      "autorole": None,
+      "triggers": {}
     }
   }
 

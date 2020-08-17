@@ -25,12 +25,6 @@ class Fakeban(commands.Cog):
         elif user.id == ctx.author.id:
             
             return await ctx.send(embed = Tools.error("Stop trying to ban yourself lmao"))
-        
-        elif user.id == self.bot.user.id:
-            
-            await ctx.send("If that's what you really want, then aight.")
-            
-            return await ctx.guild.leave()
 
         if reason:
             

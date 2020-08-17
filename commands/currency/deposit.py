@@ -18,85 +18,61 @@ class Deposit(commands.Cog):
   @commands.command(aliases = ["dep"])
   async def deposit(self, ctx, amount = None):
 
-    if not user:
-        
-      return await ctx.send(embed = Tools.error("No user specified to pay."))
-    
-    elif not amount:
-        
-      return await ctx.send(embed = Tools.error("No amount specified to pay."))
-    
-    user = Tools.getClosestUser(ctx, user)
+    if not amount:
 
-    if not user:
+      return await ctx.send(embed = Tools.error("No amount was specified to deposit."))
 
-      return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
-
-    elif user.id == ctx.author.id:
-        
-      return await ctx.send(embed = Tools.error("No paying yourself. >:C"))
-    
-    elif user.id == self.bot.user.id:
-        
-      return await ctx.send(embed = Tools.error("I don't need your coins. thx doe :D"))
-    
     db = loads(open("db/users", "r").read())
 
-    try:
+    user = db[str(ctx.author.id)]
 
-      amount = int(amount)
+    if not user["bank"]["data"]:
 
-      if len(str(amount)) > 100:
+      return await ctx.send(embed = Tools.error("You don't have a bank account, get one with the `bank` command."))
 
-        return await ctx.send(embed = Tools.error("That is way too many coins."))
+    limit = int(user["bank"]["data"]["limit"].replace(",", ""))
 
-      elif amount <= 0:
+    if user["bank"]["balance"] == limit:
 
-        return await ctx.send(embed = Tools.error("Please enter a valid amount."))
+      return await ctx.send(embed = Tools.error("You're bank is full."))
 
-    except:
+    if amount == "all":
 
-      if amount != "all":
+      amount = user["balance"]
 
-        return await ctx.send(embed = Tools.error("Please enter a valid amount."))
+    else:
 
-      else:
+      try:
 
-        amount = db[str(ctx.author.id)]["balance"]
-    
-    if not str(user.id) in db:
-        
-      return await ctx.send(embed = Tools.error(f"{user.name} doesn't have an account."))
-        
-    elif db[str(ctx.author.id)]["balance"] < amount:
+        amount = int(amount)
 
-      return await ctx.send(embed = Tools.error(f"You don't have that many coins in your account."))
+      except:
 
-    db[str(ctx.author.id)]["balance"] -= amount
-    
-    db[str(user.id)]["balance"] += amount
-        
+        return await ctx.send(embed = Tools.error("That isn't a valid amount."))
+
+    todeposit = 0
+
+    if amount + user["bank"]["balance"] > limit:
+
+      todeposit = limit - user["bank"]["balance"]
+
+    else:
+
+      todeposit = amount
+
+    user["balance"] -= todeposit
+
+    user["bank"]["balance"] += todeposit
+
     open("db/users", "w").write(dumps(db, indent = 4))
-        
-    embed = discord.Embed(title = f"{user.name} has been payed {amount} coins.", color = 0x126bf1)
-    
-    embed.set_author(name = " | Balance Update", icon_url = self.bot.user.avatar_url)
-    
-    embed.set_footer(text = f" | Transaction initiated by {ctx.author}.", icon_url = ctx.author.avatar_url)
-    
-    try:
 
-      return await ctx.send(embed = embed)
+    if len(str(todeposit)) > 5:
 
-    except:
+      a = len(str(todeposit)) - 5
 
-      embed = discord.Embed(title = f"{user.name} has been payed your entire balance.", color = 0x126bf1)
-    
-      embed.set_author(name = " | Balance Update", icon_url = self.bot.user.avatar_url)
-      
-      embed.set_footer(text = f" | Transaction initiated by {ctx.author}.", icon_url = ctx.author.avatar_url)
-      
-      return await ctx.send(embed = embed)
+      todeposit = str(todeposit[:-a]) + ".."
+
+    return await ctx.send(embed = discord.Embed(title = f"{todeposit} coins deposited to bank.", color = 0x126bf1))
 
 # Link to bot
 def setup(bot):
