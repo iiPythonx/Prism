@@ -28,9 +28,7 @@ class Kick(commands.Cog):
         
         elif user.id == self.bot.user.id:
             
-            await ctx.send("If that's what you really want, then aight.")
-            
-            return await ctx.guild.leave()
+           return await ctx.send(embed = Tools.error("You cannot kick me. >:)"))
 
         if reason:
             

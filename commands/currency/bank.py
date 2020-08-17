@@ -60,7 +60,7 @@ class Bank(commands.Cog):
 
             c = 1
 
-            embed = discord.Embed(title = "The National List of Banks", description = f"Current provider: {user['bank']['data']['name']}." if user["bank"]["data"] else "", color = 0x126bf1)
+            embed = discord.Embed(title = "The National List of Banks", description = f"Change your bank with the `bank BANKID` command.\nCurrent provider: {user['bank']['data']['name']}." if user["bank"]["data"] else "Set your bank with the `bank BANKID` command.", color = 0x126bf1)
 
             for bank in self.banks:
 

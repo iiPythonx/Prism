@@ -160,7 +160,7 @@ class Help(commands.Cog):
       
                 except:
 
-                  return await ctx.send(embed = Tools.error("Yea, that command randomly doesn't want to work today. (we are investigating it)"))
+                  return await ctx.send(embed = Tools.error("That command is bugged (so stay tuned)."))
 
                 return await ctx.send(embed = await self.embed(ctx, Tools.uppercase(category), prefix, commandClass))
 
