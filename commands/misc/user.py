@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from assets.prism import Tools
@@ -11,23 +9,13 @@ class UserInformation(commands.Cog):
 
   def __init__(self, bot):
     self.bot = bot
-    self.desc = "Gets a bunch of information on a specific user"
+    self.desc = "Fetches a user's discord information"
     self.usage = "user"
       
   @commands.command(aliases = ["ui", "userinformation"])
-  async def user(self, ctx, user: str = None):
+  async def user(self, ctx, user = None):
 
-    if not user:
-
-      user = ctx.author
-
-    else:
-
-      user = Tools.getClosestUser(ctx, user, True)
-
-      if not user:
-
-        return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
+    user = await Tools.getClosestUser(ctx, user if user else ctx.author, True)
 
     def getStatus(status):
 

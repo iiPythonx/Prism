@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 from asyncio import sleep
 from json import loads, dumps

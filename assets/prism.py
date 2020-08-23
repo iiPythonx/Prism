@@ -118,6 +118,10 @@ class Events:
 
         pass
 
+    elif "NoSuchUser" in str(error):
+
+      return
+
     await ctx.send(embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000))
       
     base = ctx.message.content.split(" ")[0] if " " in ctx.message.content else ctx.message.content
@@ -408,7 +412,7 @@ class Tools:
 
     return embed
 
-  def getClosestUser(ctx, user, return_member = False):
+  async def getClosestUser(ctx, user, return_member = False):
 
     if ctx.author.id == user.id:
 
@@ -460,7 +464,9 @@ class Tools:
 
     if not matches:
 
-      return await ctx.send(embed = Tools.error("Couldn't find that user."))
+      await ctx.send(embed = Tools.error("Couldn't find that user."))
+
+      raise AttributeError("NoSuchUser")
 
     id = int(max(matches.items(), key = itemgetter(1))[0])
 

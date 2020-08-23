@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import json
 import random

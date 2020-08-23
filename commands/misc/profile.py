@@ -1,8 +1,8 @@
 # Prism Rewrite - Basic Command
 
 # Modules
-import json
 import discord
+from json import loads
 
 from assets.prism import Tools
 from discord.ext import commands
@@ -16,17 +16,15 @@ class Profile(commands.Cog):
     self.usage = "profile [user]"
     
   @commands.command(aliases = ["account"])
-  async def profile(self, ctx, user: discord.User = None):
+  async def profile(self, ctx, user = None):
           
-    db = json.loads(open("db/users", "r").read())
+    db = loads(open("db/users", "r").read())
         
-    if not user:
-        
-        user = ctx.author
+    user = Tools.getClosestUser(ctx, user if user else ctx.author)
 
-    elif not str(user.id) in db:
+    if not str(user.id) in db:
         
-        return await ctx.send(f"{user.name} doesn't have an account.")
+        return await ctx.send(embed = Tools.error(f"{user.name} does not have a Prism account."))
         
     data = db[str(user.id)]
 

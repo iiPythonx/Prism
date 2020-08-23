@@ -18,16 +18,7 @@ class Inventory(commands.Cog):
     @commands.command(aliases = ["inv"])
     async def inventory(self, ctx, user = None):
         
-        if not user:
-            
-            user = ctx.author.name + "#" + str(ctx.author.discriminator)
-        
-        user = Tools.getClosestUser(ctx, user)
-
-        if not user:
-
-            return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
-
+        user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
         db = loads(open("db/users", "r").read())
         

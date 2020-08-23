@@ -1,21 +1,14 @@
-# Prism Rewrite - Basic Command
-
 # Modules
-import os
-import json
-
 import discord
 import inspect
 
 import importlib
+from json import loads
+
+from os import listdir
+
 from assets.prism import Tools
-
 from discord.ext import commands
-
-# Variables
-nsfw_commands = [
-  "dictionary", "gay", "lesbian", "pp", "slap"
-]
 
 # Main Command Class
 class Help(commands.Cog):
@@ -27,27 +20,13 @@ class Help(commands.Cog):
 
   def get_commands(self, ctx, category):
 
-    db = json.loads(open("db/guilds", "r").read())
-
     commands = ""
 
-    for command in os.listdir(f"commands/{category}"):
+    for command in listdir(f"commands/{category}"):
 
       if command != "__pycache__":
 
-        if not "nsfw-enabled" in db[str(ctx.guild.id)]["tags"]:
-
-          if command[:-3] in nsfw_commands:
-
-            pass
-
-          else:
-
-            commands = f"{commands}, {command[:-3]}"
-
-        else:
-                
-          commands = f"{commands}, {command[:-3]}"
+        commands = f"{commands}, {command[:-3]}"
 
     return f"``{commands[2:]}``"
 
@@ -112,7 +91,7 @@ class Help(commands.Cog):
   @commands.command(aliases = ["info", "commands", "cmds"])
   async def help(self, ctx, *, category = None):
         
-    db = json.loads(open("db/guilds", "r").read())
+    db = loads(open("db/guilds", "r").read())
 
     prefix = db[str(ctx.guild.id)]["prefix"]
 

@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import random
 import discord
@@ -28,13 +26,9 @@ class Rob(commands.Cog):
             
             return await ctx.send(embed = Tools.error("Please specify somebody to rob."))
         
-        user = Tools.getClosestUser(ctx, user)
+        user = await Tools.getClosestUser(ctx, user)
 
-        if not user:
-
-            return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
-
-        elif user.id == ctx.author.id:
+        if user.id == ctx.author.id:
             
             return await ctx.send(embed = Tools.error("Stop trying to rob yourself."))
         
