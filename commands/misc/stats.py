@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import os
 import sys
@@ -13,7 +11,7 @@ import platform
 from datetime import datetime
 from discord.ext import commands
 
-# Variables
+# Constants
 uptime_start = datetime.now()
 
 # Main Command Class

@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from datetime import date
@@ -28,19 +26,11 @@ class Settings(commands.Cog):
 
         if not key:
 
-            nsfw, levels, joinleave, prefix = False, False, "Not Set", _db["prefix"]
+            prefix = _db["prefix"]
+            nsfw = True if "nsfw-enabled" in _db["tags"] else False
+            levels = True if "levels-enabled" in _db["tags"] else False
 
-            if "nsfw-enabled" in _db["tags"]:
-
-                nsfw = True
-
-            if "levels-enabled" in _db["tags"]:
-
-                levels = True
-
-            if _db["data"]["joinleave_channel"]:
-
-                joinleave = self.bot.get_channel(_db["data"]["joinleave_channel"]).name
+            joinleave = self.bot.get_channel(_db["data"]["joinleave_channel"]).name if _db["data"]["joinleave_channel"] else "Not setup"
 
             if _db["data"]["autorole"]:
 

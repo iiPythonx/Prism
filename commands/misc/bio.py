@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import json
 import discord
@@ -24,7 +22,7 @@ class Biography(commands.Cog):
  
         elif len(bio) > 200:
             
-            return await ctx.send(embed = Tools.error("Your biography is way too long."))
+            return await ctx.send(embed = Tools.error("You're biography is way too long."))
  
         db = json.loads(open("db/users", "r").read())
         

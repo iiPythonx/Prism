@@ -1,6 +1,5 @@
-# Prism Rewrite - Basic Command
-
 # Modules
+from assets.prism import Tools
 from discord.ext import commands
 
 # Main Command Class
@@ -10,14 +9,13 @@ class TTS(commands.Cog):
         self.bot = bot
         self.desc = "Make the bot speak"
         self.usage = "tts [text]"
-        self.tags = []
 
     @commands.command(aliases = ["text2speech", "texttospeech", "speak", "speech"])
     async def tts(self, ctx, *, sentence: str = None):
 
         if not sentence:
             
-            return await ctx.send("I can't speak if you don't give me anything to say. >:C")
+            return await ctx.send(embed = Tools.error("No text specified."))
 
         try:
     
@@ -25,7 +23,7 @@ class TTS(commands.Cog):
         
         except:
             
-            return await ctx.send("I don't have permission to send TTS messages.")
+            return await ctx.send(embed = Tools.error("Missing permissions to send TTS messages."))
 
 # Link to bot
 def setup(bot):

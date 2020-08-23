@@ -34,11 +34,7 @@ class Beg(commands.Cog):
 
         if member:
             
-            member = Tools.getClosestUser(ctx, member)
-
-            if not member:
-
-                return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
+            member = await Tools.getClosestUser(ctx, member)
 
             user = member.name
 

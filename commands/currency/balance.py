@@ -20,19 +20,11 @@ class Balance(commands.Cog):
 
         db = loads(open("db/users", "r").read())
 
-        if not user:
+        user = await Tools.getClosestUser(ctx, user if user else ctx.author)
+
+        if not str(user.id) in db:
             
-            user = ctx.author.name + "#" + str(ctx.author.discriminator)
-
-        user = Tools.getClosestUser(ctx, user)
-
-        if not user:
-
-            return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
-
-        elif not str(user.id) in db:
-            
-            return await ctx.send(embed = Tools.error(f"{user.name} doesn't have an account."))
+            return await ctx.send(embed = Tools.error(f"{user.name} doesn't have a Prism account."))
 
         _user = db[str(user.id)]
 

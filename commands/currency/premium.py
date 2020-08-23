@@ -16,7 +16,7 @@ class Premium(commands.Cog):
         self.usage = "premium"
 
     @commands.command(aliases = ["upgrade"])
-    async def premium(self, ctx, *, sentence: str = None):
+    async def premium(self, ctx):
 
         db = loads(open("db/users", "r").read())
 

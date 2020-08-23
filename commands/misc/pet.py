@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads
@@ -20,17 +18,7 @@ class Pet(commands.Cog):
 
         db = loads(open("db/users", "r").read())
 
-        if not user:
-
-            user = ctx.author
-
-        else:
-
-            user = Tools.getClosestUser(ctx, user)
-
-            if not user:
-
-                return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
+        user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
         if not str(user.id) in db:
 

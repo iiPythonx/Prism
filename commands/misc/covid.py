@@ -1,10 +1,10 @@
 # Prism Rewrite - Basic Command
 
 # Modules
-import json
 import discord
+from json import loads
 
-import requests
+from requests import get
 from discord.ext import commands
 
 # Main Command Class
@@ -20,7 +20,7 @@ class Covid(commands.Cog):
     @commands.command(aliases = ["corona"])
     async def covid(self, ctx):
 
-        response = json.loads(requests.get(self.url).text)
+        response = loads(get(self.url).text)
 
         stats = f"""Active Cases (worldwide): {response["activeCases"]}\nClosed Cases (worldwide): {response["closedCases"]}\n\nTotal Cases (worldwide): {response["totalCases"]}\nRecovered (worldwide): {response["recovered"]}\nDeaths (worldwide): {response["deaths"]}\n\nLast update: {response["lastUpdate"]}"""
 

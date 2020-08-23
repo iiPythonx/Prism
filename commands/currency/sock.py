@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from random import randint
@@ -18,7 +16,7 @@ class Sock(commands.Cog):
     self.usage = "sock [user]"
 
   @commands.command()
-  async def sock(self, ctx, user: str = None):
+  async def sock(self, ctx, user = None):
 
     if Cooldowns.on_cooldown(ctx, "sock"):
 
@@ -26,13 +24,9 @@ class Sock(commands.Cog):
 
     elif not user:
         
-      return await ctx.send(embed = Tools.error("I need to know who your trying to sock."))
+      return await ctx.send(embed = Tools.error("No user specified to sock."))
 
     user = Tools.getClosestUser(ctx, user)
-
-    if not user:
-
-      return await ctx.send(embed = Tools.error(f"I couldn't find that user; try again with more letters."))
 
     db = loads(open("db/users", "r").read())
 
