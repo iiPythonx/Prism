@@ -4,8 +4,8 @@
 from asyncio import sleep
 from json import loads, dumps
 
-from assets.prism import Tools
 from discord.ext import commands
+from assets.prism import Tools, Cooldowns
 
 # Main Command Class
 class Buy(commands.Cog):
@@ -102,6 +102,8 @@ class Buy(commands.Cog):
       user["data"]["inventory"]["Cooldown Repellent"] = {"count": 1}
 
       await ctx.send(embed = Tools.bought("Cooldown Repellent", 1))
+
+      Cooldowns.clear_cooldown(ctx.author)
 
       self.save(db)
 

@@ -8,8 +8,6 @@
 # Modules
 from os import getenv, listdir
 from dotenv import load_dotenv
-
-from website.start import startServer
 from assets.prism import BotInstance, Events
 
 # Register our .env file
@@ -77,9 +75,6 @@ async def on_member_remove(member):
 async def on_message_delete(message):
 
   return Events.message_delete(message)
-  
-# Web dashboard
-startServer(bot)
 
 # Discord connection
 bot.run(auth, reconnect = True)

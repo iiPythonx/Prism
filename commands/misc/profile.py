@@ -67,7 +67,9 @@ class Profile(commands.Cog):
       Favorite Command: {favorite_command}
     """
 
-    embed = discord.Embed(title = user.name + "#" + user.discriminator, description = data["data"]["bio"], color = 0x126bf1)
+    premium = ":medal: | " if "premium" in data["data"]["tags"] else ""
+
+    embed = discord.Embed(title = premium + user.name + "#" + user.discriminator, description = data["data"]["bio"], color = 0x126bf1)
 
     embed.add_field(name = "Details:", value = profile, inline = False)
 

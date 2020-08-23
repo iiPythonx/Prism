@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 from requests import get
 from assets.prism import Tools
@@ -29,7 +27,7 @@ class Ascii(commands.Cog):
 
     if text == "````":
 
-      return await ctx.send(embed = Tools.error("Ruh roh raggy, you broke ascii."))
+      return await ctx.send(embed = Tools.error("Your text contains unsupported characters."))
 
     try:
 

@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from random import choice
@@ -53,7 +51,7 @@ class Eightball(commands.Cog):
             
             question = f"{question}?"
             
-        question = f"{question[0].upper()}{question[1:]}"
+        question = Tools.upprcase(question)
 
         question = question.replace(" i ", " I ")
 

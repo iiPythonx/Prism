@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from assets.prism import Tools
@@ -11,23 +9,21 @@ class Avatar(commands.Cog):
 
   def __init__(self, bot):
     self.bot = bot
-    self.desc = "Check somebodies avatar"
+    self.desc = "View a Discord user's profile picture"
     self.usage = "avatar [user]"
+
+    self.options = [
+      "Looking good, {}.",
+      "Nice, {}.",
+      "{} is looking good today."
+    ]
 
   @commands.command(aliases = ["pfp", "picture"])
   async def avatar(self, ctx, *, user: str = None):
 
-    if not user:
-        
-      user = ctx.author
+    user = Tools.getClosestUser(ctx, user if user else ctx.author)
 
-    user = Tools.getClosestUser(ctx, user)
-
-    if not user:
-
-      return await ctx.send(embed = Tools.error("I wasn't able to find that user."))
-
-    embed = discord.Embed(title = f"Looking good, {user.name}.", color = 0x126bf1)
+    embed = discord.Embed(title = choice(self.options).format(user.name), color = 0x126bf1)
     
     embed.set_image(url = user.avatar_url)
     

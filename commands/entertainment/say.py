@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 from assets.prism import Tools
 from discord.ext import commands

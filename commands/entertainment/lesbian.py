@@ -18,7 +18,7 @@ class Lesbian(commands.Cog):
         self.usage = "lesbian [user]"
 
     @commands.command()
-    async def lesbian(self, ctx, user: discord.User = None):
+    async def lesbian(self, ctx, user: str = None):
 
         db = loads(open("db/guilds", "r").read())
 
@@ -30,9 +30,7 @@ class Lesbian(commands.Cog):
 
           return await ctx.send(embed = Tools.error("NSFW is not enabled in this channel."))
 
-        elif not user:
-            
-            user = ctx.author
+        user = Tools.getClosestUser(ctx, user if user else ctx.author)
 
         rating = randint(0, 100)
 
