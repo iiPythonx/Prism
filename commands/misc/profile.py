@@ -20,7 +20,7 @@ class Profile(commands.Cog):
           
     db = loads(open("db/users", "r").read())
         
-    user = Tools.getClosestUser(ctx, user if user else ctx.author)
+    user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
     if not str(user.id) in db:
         

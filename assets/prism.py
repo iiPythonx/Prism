@@ -108,11 +108,15 @@ class Events:
 
       return await ctx.send(embed = Tools.error(f"You need the {str(error).split('sing ')[1].split(' per')[0]} permission(s) to use this command."))
 
-    elif "Forbidden: 403 Forbidden" in str(error):
+    elif isinstance(error, commands.CommandNotFound):
+
+      return
+
+    elif "403" in str(error):
       
       try:
 
-        return await ctx.send(embed = Tools.error("I'm either missing permission(s) or that user is higher than me."))
+        return await ctx.send(embed = Tools.error("Missing permission(s)."))
 
       except:
 
@@ -120,7 +124,7 @@ class Events:
 
     elif "NoSuchUser" in str(error):
 
-      return
+      return await ctx.send(embed = Tools.error("Couldn't find that user."))
 
     await ctx.send(embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000))
       
@@ -414,10 +418,6 @@ class Tools:
 
   async def getClosestUser(ctx, user, return_member = False):
 
-    if ctx.author.id == user.id:
-
-      user = ctx.author.id
-
     user = str(user)
 
     matcher = StringMatcher()
@@ -464,9 +464,7 @@ class Tools:
 
     if not matches:
 
-      await ctx.send(embed = Tools.error("Couldn't find that user."))
-
-      raise AttributeError("NoSuchUser")
+      raise ValueError("NoSuchUser")
 
     id = int(max(matches.items(), key = itemgetter(1))[0])
 
