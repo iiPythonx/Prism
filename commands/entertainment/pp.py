@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads
@@ -14,11 +12,11 @@ class Penis(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.desc = "Calculates how big someones PP is based on nuclear physics"
+        self.desc = "Calculates how big someones PP is (based on nuclear physics)"
         self.usage = "pp [user]"
 
     @commands.command(aliases = ["penis"])
-    async def pp(self, ctx, user: discord.User = None):
+    async def pp(self, ctx, user: str = None):
 
         db = loads(open("db/guilds", "r").read())
 
@@ -30,6 +28,7 @@ class Penis(commands.Cog):
 
           return await ctx.send(embed = Tools.error("NSFW is not enabled in this channel."))
 
+        user = Tools.getClosestUser(ctx, user if user else ctx.author)
 
         pp = "8"
         
@@ -47,7 +46,7 @@ class Penis(commands.Cog):
 
         message = f"Here is your PP:\n{pp}"
         
-        if user and user.id != ctx.author.id:
+        if user.id != ctx.author.id:
             
             message = f"Here is {user.name}'s PP:\n{pp}"
             

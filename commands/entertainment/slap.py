@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 from assets.prism import Tools
 from discord.ext import commands
@@ -11,7 +9,6 @@ class Slap(commands.Cog):
         self.bot = bot
         self.desc = "Slap the hell out of somebody"
         self.usage = "slap [user]"
-        self.tags = []
 
     @commands.command()
     async def slap(self, ctx, *, user = None):

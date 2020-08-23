@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from requests import get
@@ -14,7 +12,7 @@ class Dictionary(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.desc = "Lookup a word in the dictionary"
+        self.desc = "Lookup a word in the urban dictionary"
         self.usage = "dictionary [word]"
 
     @commands.command(aliases = ["dict", "lookup", "ud"])
@@ -38,11 +36,7 @@ class Dictionary(commands.Cog):
         
         elif word.startswith("<@!"):
             
-            word = self.bot.get_user(int(word.split("<@!")[1].split(">")[0])).name
-     
-        elif word.startswith("<@"):
-            
-            word = self.bot.get_user(int(word.split("<@")[1].split(">")[0])).name
+            word = Tools.getClosestUser(word).name
      
         elif len(word) > 50:
 

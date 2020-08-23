@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads
@@ -12,7 +10,7 @@ class Meme(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.desc = "Fresh memes coming straight at you"
+        self.desc = "Fresh memes coming straight at ya'"
         self.usage = "meme"
 
     @commands.command(aliases = ["memes"])

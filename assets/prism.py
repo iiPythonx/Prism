@@ -1,8 +1,7 @@
-# Prism Rewrite - Main Prism File
-# Contains all the functions that Prism needs to operate
+# Prism Rewrite - Main File
+# Contains all the functions (and events) that Prism needs to operate.
 
-# Last revision on August 7th, 2020.
-
+# Last revision on August 22nd, 2020.
 
 # Modules
 import discord
@@ -25,13 +24,12 @@ class BotInstance:
     global bot
     
     bot = commands.Bot(
-        command_prefix = Tools.get_prefix,
-        case_insensitive = True,
-        owner_ids = [
-          633185043774177280,
-          666839157502378014,
-          403375652755079170
-        ]
+      command_prefix = Tools.get_prefix,
+      case_insensitive = True,
+      owner_ids = [
+        633185043774177280,
+        666839157502378014
+      ]
     )
     
     bot.remove_command("help")
@@ -102,10 +100,6 @@ class Events:
         
       return await ctx.send(embed = Tools.error("Unknown (or invalid) argument provided."))
         
-    elif isinstance(error, commands.CommandNotFound):
-
-      return await ctx.send(embed = Tools.error("Sorry, but that command doesn't exist."))
-
     elif isinstance(error, commands.NotOwner):
 
       return await ctx.send(embed = Tools.error("This command is owner-only."))
@@ -124,9 +118,11 @@ class Events:
 
         pass
 
-    await ctx.send(embed = Tools.error("Sorry, an unknown error occured."))
+    await ctx.send(embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000))
       
-    return print(f"Command `{ctx.message.content}` used by `{ctx.author}`:" + "\n\t" + str(error))
+    base = ctx.message.content.split(" ")[0] if " " in ctx.message.content else ctx.message.content
+
+    return print(f"Command `{base}` used by `{ctx.author}`:" + "\n\t" + str(error))
       
   async def on_message(message):
 
@@ -136,19 +132,6 @@ class Events:
           
       return
       
-    elif not message.guild:
-          
-      return await ctx.send("Sorry, Prism isn't available in private messages.")
-      
-    elif ctx.id == 729760209223942165:
-
-      update = {
-        "jumpurl": message.jump_url,
-        "content": message.content
-      }
-
-      open("assets/res/plain-text/update.txt", "w+").write(dumps(update, indent = 4))
-
     try:
 
       prefix = gdb[str(message.guild.id)]["prefix"]
@@ -159,7 +142,7 @@ class Events:
 
     if message.content in gdb[str(message.guild.id)]["data"]["triggers"]:
 
-      await ctx.send(gdb[str(message.guild.id)]["data"]["triggers"][message.content])
+      return await ctx.send(gdb[str(message.guild.id)]["data"]["triggers"][message.content])
 
     # Leveling
     if str(message.author.id) in db:
@@ -169,7 +152,7 @@ class Events:
       current_level = levels["level"]
       experience = levels["xp"]
 
-      required_xp = current_level * 1000
+      required_xp = current_level * 250
 
       if experience >= required_xp:
 
@@ -189,17 +172,11 @@ class Events:
 
         open("db/users", "w").write(dumps(db, indent = 4))
 
-    try:
+    if not Tools.ensure_command(gdb, message):
+        
+      return
 
-      if not Tools.ensure_command(gdb, message):
-          
-        return
-      
-    except:
-
-      pass
-
-    if not str(user.id) in db:
+    elif not str(user.id) in db:
           
       db[str(user.id)] = Constants.user_preset
           
@@ -207,7 +184,7 @@ class Events:
       
     elif Tools.has_flag(db, user, "blacklisted"):
 
-      return await ctx.send(embed = discord.Embed(title = "Sorry, but you are blacklisted from Prism.", color = 0x126bf1))
+      return await ctx.send(embed = discord.Embed(title = "Sorry, but you are blacklisted from Prism.", color = 0xFF0000))
       
     elif db[str(user.id)]["balance"] < 0:
           
@@ -255,9 +232,9 @@ class Events:
         
       channel = bot.get_channel(int(db[str(member.guild.id)]["data"]["joinleave_channel"]))
         
-      embed = discord.Embed(description = f"Welcome to the server, {member.name}; hope you like it here.", color = 0x126bf1)
+      embed = discord.Embed(description = f"Welcome to {member.guild.name}, {member.name}.", color = 0x126bf1)
         
-      embed.set_author(name = " | Member Joined", icon_url = bot.user.avatar_url)
+      embed.set_author(name = " | Welcome", icon_url = bot.user.avatar_url)
         
       embed.set_footer(text = f"Enjoy the server, {member.name}.", icon_url = member.avatar_url)
         
@@ -289,7 +266,7 @@ class Events:
 
       except:
 
-        db[str(member.guild.id)]["data"]["joinleave_channel"] = None
+        db[str(member.guild.id)]["data"]["autorole"] = None
 
         return open("db/guilds", "w").write(dumps(db, indent = 4))
 
@@ -305,7 +282,7 @@ class Events:
         
         embed.set_author(name = " | Member Left", icon_url = bot.user.avatar_url)
         
-        embed.set_footer(text = f"Please nobody else leave :C.", icon_url = member.avatar_url)
+        embed.set_footer(text = f" | New user count: {len(member.guild.members)}", icon_url = member.guild.icon_url)
         
         try:
         
@@ -319,7 +296,7 @@ class Events:
 
   def message_delete(message):
 
-    if len(message.content) > 409:
+    if len(message.content) > 400:
 
       return
 
@@ -375,18 +352,13 @@ class Tools:
     
     watching_names = [
       "for p!help.",
-      "your mother.",
-      "the simpsons.",
       "TV, so shush!",
       f"{len(bot.users)} users.",
       "YouTube.",
       "my many fans.",
-      "your father. >_>",
-      "strange errors.",
       "for p!rob.",
       "for p!bomb",
       "DmmD code.",
-      "commuter sleep.",
       "p!help mod."
     ]
     
@@ -395,49 +367,38 @@ class Tools:
       "ROBLOX.",
       "BeamNG.drive.",
       "on an old Atari.",
-      "with my dev.",
-      "with my many friends.",
+      "with my friends.",
       "GTA V.",
       "on steam.",
       "Unturned.",
+      "Terraria",
       "with Dmot.",
       "with Bob.",
-      "with your mum. HA!",
     ]
     
     activity = choice(["watching", "playing"])
-    
-    if activity == "watching":
         
-      while True:
-      
-        try:
-            
+    while True:
+    
+      try:
+
+        if activity == "watching":
+          
           await bot.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.watching, name = choice(watching_names)))
-    
-          break
-    
-        except:
-            
-          await sleep(15)
-        
-    else:
-        
-      while True:
-            
-        try:
-                
+  
+        else:
+
           await bot.change_presence(status = discord.Status.idle, activity = discord.Activity(type = discord.ActivityType.playing, name = choice(playing_names)))
-        
-          break
-        
-        except:
-                
-          await sleep(15)
+
+        break
+  
+      except:
+          
+        await sleep(15)
 
   def error(text):
 
-    embed = discord.Embed(description = f":x: \t **{text}**", color = 0xff0000)
+    embed = discord.Embed(description = f":x: \t **{text}**", color = 0xFF0000)
 
     return embed
 
@@ -448,6 +409,12 @@ class Tools:
     return embed
 
   def getClosestUser(ctx, user, return_member = False):
+
+    if ctx.author.id == user.id:
+
+      user = ctx.author.id
+
+    user = str(user)
 
     matcher = StringMatcher()
 
@@ -493,7 +460,7 @@ class Tools:
 
     if not matches:
 
-      return None
+      return await ctx.send(embed = Tools.error("Couldn't find that user."))
 
     id = int(max(matches.items(), key = itemgetter(1))[0])
 
@@ -552,11 +519,6 @@ class Constants:
     }
   }
 
-  word_list = [
-    "discord", "cat", "dog", "minecraft", "hairnet", "code", "random", "snake", "screen",
-    "television", "lottery", "premium", "badge", "roblox", "mouse", "keyboard", "tablet"
-  ]
-
 class Cooldowns:
 
   cooldowns = {}
@@ -567,7 +529,7 @@ class Cooldowns:
 
       if "Cooldown Repellent" in db[str(ctx.author.id)]["data"]["inventory"]:
 
-        return
+        sec = round(sec / 2)
 
       try:
 

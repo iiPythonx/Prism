@@ -17,6 +17,33 @@ class Work(commands.Cog):
         self.desc = "Work for some hard, cold cash"
         self.usage = "work"
 
+        self.problems = [
+            {
+                "equation": "5 + 5",
+                "answer": "10"
+            },
+            {
+                "equation": "16 + 5",
+                "answer": "21"
+            },
+            {
+                "equation": "9 + 10",
+                "answer": "19"
+            },
+            {
+                "equation": "(5 + 5) / 2",
+                "answer": "5"
+            },
+            {
+                "equation": "5x - 5 = 10; what is x?",
+                "answer": "3"
+            },
+            {
+                "equation": "((9 x 9) - 1 + 20) / 100",
+                "answer": "1"
+            }
+        ]
+
     @commands.command()
     async def work(self, ctx):
         
@@ -26,9 +53,9 @@ class Work(commands.Cog):
 
         failed_earn = randint(20, 80)
         
-        word = choice(Constants.word_list)
+        problem = choice(self.problems)
         
-        bot_msg = await ctx.send(f"You are now working; repeat the word ``{word}`` in this channel.")
+        bot_msg = await ctx.send(f"You are now working; solve the equation: `{problem['equation']}`.")
         
         db = loads(open("db/users", "r").read())
         
@@ -46,7 +73,7 @@ class Work(commands.Cog):
             
             open("db/users", "w").write(dumps(db, indent = 4))
 
-            return await ctx.send(embed = Tools.error(f"You messed up at work; but you still earned {failed_earn} coins."))
+            return await ctx.send(embed = Tools.error(f"You didn't respond fast enough; but you still earned {failed_earn} coins."))
         
         try:
             
@@ -56,7 +83,7 @@ class Work(commands.Cog):
             
             pass
         
-        if not message.content.lower() == word:
+        if not message.content.lower() == problem["answer"]:
             
             db[str(ctx.author.id)]["balance"] += failed_earn
             
@@ -66,7 +93,7 @@ class Work(commands.Cog):
             
             return await Cooldowns.set_cooldown(ctx, "work", 600)
         
-        good_earnings = randint(100, 275)
+        good_earnings = randint(200, 450)
             
         db[str(ctx.author.id)]["balance"] += good_earnings
             

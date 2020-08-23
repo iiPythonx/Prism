@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from random import randint
@@ -22,19 +20,19 @@ class Hotdog(commands.Cog):
 
         if not user:
 
-            return await ctx.send(embed = Tools.error("McBruh, who you tryna hit?"))
+            return await ctx.send(embed = Tools.error("Mcbruh, who you tryna hit?"))
 
         user = Tools.getClosestUser(ctx, user)
 
-        if not user:
-
-            return await ctx.send(embed = Tools.error("Yea I don't think that's an actual person."))
-
         db = loads(open("db/users", "r").read())
 
-        if not str(user.id) in db:
+        if not Tools.has_flag(db, ctx.author, "premium"):
 
-            return await ctx.send(embed = Tools.error("Yea they don't have an account lmao"))
+            return await ctx.send(embed = Tools.error("You need premium to use this command."))
+
+        elif not str(user.id) in db:
+
+            return await ctx.send(embed = Tools.error(f"{user.name} does not have a Prism account."))
 
         _user = db[str(ctx.author.id)]
 

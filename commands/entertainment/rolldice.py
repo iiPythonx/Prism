@@ -1,9 +1,8 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from random import randint
 
+from assets.prism import Tools
 from discord.ext import commands
 
 # Main Command Class
@@ -19,11 +18,11 @@ class Rolldice(commands.Cog):
         
         if maximum > 100 or maximum < 2:
             
-            return await ctx.send("Maximum side count is 100; minimum is 2.")
+            return await ctx.send(embed = Tools.error("Maximum side count is 100; minimum is 2."))
             
         embed = discord.Embed(title = f"{maximum} sided diceroll.", description = f"The dice landed on {randint(1, maximum)}.", color = 0x126bf1)
         
-        embed.set_author(name = " | Dice", icon_url = self.bot.user.avatar_url)
+        embed.set_author(name = " | Dice Roll", icon_url = self.bot.user.avatar_url)
         
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 

@@ -15,7 +15,7 @@ class Withdraw(commands.Cog):
     self.desc = "Takes coins in your bank"
     self.usage = "withdraw [amount]"
 
-  @commands.command(aliases = ["wd"])
+  @commands.command(aliases = ["wd", "with"])
   async def withdraw(self, ctx, amount = None):
 
     if not amount:

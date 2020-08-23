@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 from discord.ext import commands
 from assets.prism import Constants, Tools
@@ -11,7 +9,6 @@ class Emojify(commands.Cog):
         self.bot = bot
         self.desc = "Turns text into emojies"
         self.usage = "emojify [text]"
-        self.tags = []
 
     @commands.command(aliases = ["emoji"])
     async def emojify(self, ctx, *, text = None):
