@@ -121,9 +121,9 @@ class Help(commands.Cog):
     
     else:
 
-      for command_folder in os.listdir("commands"):
+      for command_folder in listdir("commands"):
 
-        for command in os.listdir(f"commands/{command_folder}"):
+        for command in listdir(f"commands/{command_folder}"):
             
           if f"{category.lower()}.py" == command:
             
