@@ -51,7 +51,7 @@ class Eightball(commands.Cog):
             
             question = f"{question}?"
             
-        question = Tools.upprcase(question)
+        question = Tools.uppercase(question)
 
         question = question.replace(" i ", " I ")
 
