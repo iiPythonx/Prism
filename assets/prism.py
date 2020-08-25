@@ -1,7 +1,7 @@
 # Prism Rewrite - Main File
 # Contains all the functions (and events) that Prism needs to operate.
 
-# Last revision on August 22nd, 2020.
+# Last revision on August 25th, 2020.
 
 # Modules
 import discord
@@ -10,18 +10,24 @@ from random import choice
 from asyncio import sleep
 from os import system, name
 
+from .logging import Logging
 from json import loads, dumps
-from operator import itemgetter
 
+from operator import itemgetter
 from discord.ext import commands, tasks
+
 from Levenshtein.StringMatcher import StringMatcher
 
 # Classes
 class BotInstance:
 
   def create():
+
+    global log
     
     global bot
+
+    log = Logging()
     
     bot = commands.Bot(
       command_prefix = Tools.get_prefix,
@@ -126,12 +132,16 @@ class Events:
 
       return await ctx.send(embed = Tools.error("Couldn't find that user."))
 
-    await ctx.send(embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000))
-      
+    embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
+
+    embed.add_field(name = "Technical Information", value = f"```py\n{error}\n```", inline = False)
+
+    await ctx.send(embed = embed)
+
     base = ctx.message.content.split(" ")[0] if " " in ctx.message.content else ctx.message.content
 
-    return print(f"Command `{base}` used by `{ctx.author}`:" + "\n\t" + str(error))
-      
+    return log.error(f"Command `{base}` raised an error: {error}")
+
   async def on_message(message):
 
     ctx, user, db, gdb = message.channel, message.author, loads(open("db/users", "r").read()), loads(open("db/guilds", "r").read())
@@ -400,7 +410,7 @@ class Tools:
 
         break
   
-      except:
+      except: 
           
         await sleep(15)
 
@@ -418,7 +428,7 @@ class Tools:
 
   async def getClosestUser(ctx, user, return_member = False):
 
-    user = str(user)
+    user = str(user).lower()
 
     matcher = StringMatcher()
 
@@ -440,7 +450,7 @@ class Tools:
 
       for item in member:
 
-        matcher.set_seqs(user, member[item])
+        matcher.set_seqs(user, member[item].lower())
 
         data[item] = matcher.ratio()
 
