@@ -14,11 +14,7 @@ class Ascii(commands.Cog):
 
   @commands.command()
   async def ascii(self, ctx, *, sentence: str = None):
-
-    x = 5
-
-    x += "s"
-
+    
     if not sentence:
         
       return await ctx.send(embed = Tools.error("No text was specified."))

@@ -134,7 +134,7 @@ class Events:
 
     embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
 
-    embed.add_field(name = "Technical Information", value = f"```py\n{error}\n```", inline = False)
+    embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
 
     await ctx.send(embed = embed)
 
