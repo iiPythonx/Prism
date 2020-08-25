@@ -26,7 +26,7 @@ class Pay(commands.Cog):
         
       return await ctx.send(embed = Tools.error("No amount specified to pay."))
     
-    user = Tools.getClosestUser(ctx, user)
+    user = await Tools.getClosestUser(ctx, user)
 
     if user.id == ctx.author.id:
         

@@ -7,3 +7,6 @@ __pycache__
 # Please dont track the dbs plz :)
 users
 guilds
+
+# Developer stuff
+.vscode/

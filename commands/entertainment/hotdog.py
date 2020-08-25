@@ -22,9 +22,11 @@ class Hotdog(commands.Cog):
 
             return await ctx.send(embed = Tools.error("Mcbruh, who you tryna hit?"))
 
-        user = Tools.getClosestUser(ctx, user)
+        user = await Tools.getClosestUser(ctx, user)
 
         db = loads(open("db/users", "r").read())
+
+        await ctx.send(str(user))
 
         if not Tools.has_flag(db, ctx.author, "premium"):
 
@@ -37,7 +39,7 @@ class Hotdog(commands.Cog):
         _user = db[str(ctx.author.id)]
 
         __user = db[str(user.id)]
-
+        
         inventory = _user["data"]["inventory"]
 
         if not "Hotdog" in inventory:

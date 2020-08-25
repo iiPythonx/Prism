@@ -26,7 +26,7 @@ class Sock(commands.Cog):
         
       return await ctx.send(embed = Tools.error("No user specified to sock."))
 
-    user = Tools.getClosestUser(ctx, user)
+    user = await Tools.getClosestUser(ctx, user)
 
     db = loads(open("db/users", "r").read())
 
@@ -34,6 +34,10 @@ class Sock(commands.Cog):
 
       return await ctx.send(embed = Tools.error("Stop trying to sock yourself."))
 
+    elif not Tools.has_flag(db, ctx.author, "premium"):
+
+      return await ctx.send(embed = Tools.error("You need premium to use this command."))
+      
     elif not str(user.id) in db:
 
       earnings = randint(0, 100)
