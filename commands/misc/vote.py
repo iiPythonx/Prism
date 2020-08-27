@@ -1,12 +1,12 @@
 # Modules
-import json
 import discord
-
 import requests
+
+from json import loads
 from asyncio import sleep
 
 from discord.ext import commands
-from assets.prism import Cooldowns
+from assets.prism import Cooldowns, Tools
 
 # Main Command Class
 class Vote(commands.Cog):
@@ -25,7 +25,7 @@ class Vote(commands.Cog):
 
             return await ctx.send(embed = Cooldowns.cooldown_text(ctx, "vote"))
 
-        bot_data = json.loads(requests.get("https://top.gg/api/bots/685550504276787200", headers = {"Authorization": self.token}).text)
+        bot_data = loads(requests.get("https://top.gg/api/bots/685550504276787200", headers = {"Authorization": self.token}).text)
 
         base_upvotes = bot_data["points"]
 
@@ -51,13 +51,13 @@ class Vote(commands.Cog):
         
         while failed_attempts < 16:
             
-            bot_data = json.loads(requests.get("https://top.gg/api/bots/685550504276787200", headers = {"Authorization": self.token}).text)
+            bot_data = loads(requests.get("https://top.gg/api/bots/685550504276787200", headers = {"Authorization": self.token}).text)
 
             current_upvotes = bot_data["points"]
             
             if current_upvotes > base_upvotes:
             
-                db = json.loads(open("db/users", "r").read())
+                db = loads(open("db/users", "r").read())
 
                 db[str(ctx.author.id)]["balance"] = db[str(ctx.author.id)]["balance"] + 2750
 
@@ -84,6 +84,12 @@ class Vote(commands.Cog):
                 except:
 
                     pass
+
+                if Tools.has_flag(db, ctx.author, "premium"):
+
+                    await Cooldowns.set_cooldown(ctx, "vote", 86400)
+
+                    break
 
                 await Cooldowns.set_cooldown(ctx, "vote", 43200)
 
