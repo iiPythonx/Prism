@@ -98,7 +98,7 @@ class Events:
 
   async def error_handler(ctx, error):
 
-    if ctx.guild.id in [264445053596991498]:
+    if ctx.guild and ctx.guild.id in [264445053596991498]:
 
       return
 
@@ -149,6 +149,26 @@ class Events:
     if user.bot:
           
       return
+
+    elif not message.guild:
+
+      command = message.content.lower()
+
+      if not command.startswith("p!"):
+
+        return
+
+      command = command[2:]
+
+      if " " in command:
+
+        command = command.split(" ")[0]
+
+      if not command in ["ping", "help", "uptime", "invite", "stats", "vote", "eval", "load", "reload"]:
+
+        return await ctx.send(embed = Tools.error("That command can only be used in a guild."))
+
+      return True
       
     try:
 
@@ -156,7 +176,11 @@ class Events:
 
     except:
 
-      return
+      gdb[str(message.guild.id)] = Constants.guild_preset
+
+      prefix = "p!"
+
+      open("db/guilds", "w").write(dumps(gdb, indent = 4))
 
     if message.content in gdb[str(message.guild.id)]["data"]["triggers"]:
 
@@ -182,7 +206,13 @@ class Events:
 
         if "levels-enabled" in gdb[str(message.guild.id)]["tags"]:
 
-          await ctx.send(f"> Congratulations, {message.author.mention}! You advanced to level {current_level + 1} :tada:\n> (you can disable these by using ``{prefix}settings levels off``)")
+          try:
+
+            await ctx.send(f"> Congratulations, {message.author.mention}! You advanced to level {current_level + 1} :tada:\n> (you can disable these by using ``{prefix}settings levels off``)")
+
+          except:
+
+            pass
 
       else:
 
@@ -318,6 +348,10 @@ class Events:
 
       return
 
+    elif not message.guild:
+
+      return
+
     db = loads(open("db/guilds", "r").read())
 
     if len(db[str(message.guild.id)]["data"]["deleted_messages"]) == 5:
@@ -359,7 +393,13 @@ class Tools:
   
   def get_prefix(bot, msg):
       
-    return loads(open("db/guilds", "r").read())[str(msg.guild.id)]["prefix"]
+    db = loads(open("db/guilds", "r").read())
+
+    if not msg.guild:
+      
+      return "p!"
+
+    return db[str(msg.guild.id)]["prefix"]
   
   def uppercase(text):
       
@@ -514,7 +554,8 @@ class Constants:
       "commands": {
         "sent": 0,
         "used": {}
-      }
+      },
+      "effects": {}
     }
   }
 

@@ -90,10 +90,16 @@ class Help(commands.Cog):
 
   @commands.command(aliases = ["info", "commands", "cmds"])
   async def help(self, ctx, *, category = None):
-        
-    db = loads(open("db/guilds", "r").read())
 
-    prefix = db[str(ctx.guild.id)]["prefix"]
+    if ctx.guild:
+
+      db = loads(open("db/guilds", "r").read())
+
+      prefix = db[str(ctx.guild.id)]["prefix"]
+
+    else:
+
+      prefix = "p!"
 
     if not category:
 

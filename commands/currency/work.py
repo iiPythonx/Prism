@@ -1,9 +1,9 @@
 # Modules
 import discord
-from json import loads, dumps
+from random import randint
 
+from json import loads, dumps
 from discord.ext import commands
-from random import randint, choice
 
 from assets.prism import Tools, Constants, Cooldowns
 
@@ -12,35 +12,8 @@ class Work(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.desc = "Work for some hard, cold cash"
+        self.desc = "Work for some coins"
         self.usage = "work"
-
-        self.problems = [
-            {
-                "equation": "5 + 5",
-                "answer": "10"
-            },
-            {
-                "equation": "16 + 5",
-                "answer": "21"
-            },
-            {
-                "equation": "9 + 10",
-                "answer": "19"
-            },
-            {
-                "equation": "(5 + 5) / 2",
-                "answer": "5"
-            },
-            {
-                "equation": "5x - 5 = 10; what is x?",
-                "answer": "3"
-            },
-            {
-                "equation": "((9 x 9) - 1 + 20) / 100",
-                "answer": "1"
-            }
-        ]
 
     @commands.command()
     async def work(self, ctx):
@@ -48,12 +21,14 @@ class Work(commands.Cog):
         if Cooldowns.on_cooldown(ctx, "work"):
             
             return await ctx.send(embed = Cooldowns.cooldown_text(ctx, "work"))
+        
+        n1 = randint(1, 100)
 
-        failed_earn = randint(20, 80)
-        
-        problem = choice(self.problems)
-        
-        bot_msg = await ctx.send(f"You are now working; solve the equation: `{problem['equation']}`.")
+        n2 = randint(1, 100)
+
+        answer = n1 + n2
+
+        bot_msg = await ctx.send(f"You are now working; solve the equation: `{n1} + {n2}`.")
         
         db = loads(open("db/users", "r").read())
         
@@ -66,12 +41,14 @@ class Work(commands.Cog):
             message = await self.bot.wait_for("message", check = check, timeout = 5)
         
         except:
-            
-            db[str(ctx.author.id)]["balance"] += failed_earn
+
+            earnings = randint(20, 100)
+
+            db[str(ctx.author.id)]["balance"] += earnings
             
             open("db/users", "w").write(dumps(db, indent = 4))
 
-            return await ctx.send(embed = Tools.error(f"You didn't respond fast enough; but you still earned {failed_earn} coins."))
+            return await ctx.send(embed = Tools.error(f"You didn't respond fast enough; but you still earned {earnings} coins."))
         
         try:
             
@@ -81,23 +58,25 @@ class Work(commands.Cog):
             
             pass
         
-        if not message.content.lower() == problem["answer"]:
+        if not message.content.lower() == str(answer):
             
-            db[str(ctx.author.id)]["balance"] += failed_earn
+            earnings = randint(20, 100)
+
+            db[str(ctx.author.id)]["balance"] += earnings
             
             open("db/users", "w").write(dumps(db, indent = 4))
 
-            await ctx.send(embed = Tools.error(f"You messed up at work; but you still earned {failed_earn} coins."))
+            await ctx.send(embed = Tools.error(f"You messed up at work; but you still earned {earnings} coins."))
             
             return await Cooldowns.set_cooldown(ctx, "work", 600)
         
-        good_earnings = randint(200, 450)
+        reward = randint(200, 450)
             
-        db[str(ctx.author.id)]["balance"] += good_earnings
+        db[str(ctx.author.id)]["balance"] += reward
             
         open("db/users", "w").write(dumps(db, indent = 4))
             
-        embed = discord.Embed(title = f"Good job, you went to work and earned {good_earnings} coins.", color = 0x126bf1)
+        embed = discord.Embed(title = f"Good job, you went to work and earned {reward} coins.", color = 0x126bf1)
         
         embed.set_author(name = " | Work", icon_url = self.bot.user.avatar_url)
         

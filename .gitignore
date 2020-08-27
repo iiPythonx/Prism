@@ -1,5 +1,5 @@
 # Rid of the pycache
-__pycache__
+__pycache__/
 
 # HIDE THE .ENV AAAAAAAAA
 .env
