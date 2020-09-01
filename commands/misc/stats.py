@@ -35,93 +35,81 @@ class Stats(commands.Cog):
       bytes /= factor
 
   @commands.command(aliases = ["statistics", "bot"])
-  async def stats(self, ctx, *, etc: str = None):
+  async def stats(self, ctx):
 
-    orig_time = time.time()
+    percore_usage = ""
 
-    command_count = 0
+    for i, percentage in enumerate(psutil.cpu_percent(percpu = True, interval = 1)):
 
-    for folder in os.listdir("commands"):
+      percore_usage = f"{percore_usage}\tCore #{i + 1}: {percentage}%\n"
 
-      for file in os.listdir(f"commands/{folder}"):
+    bt = datetime.fromtimestamp(psutil.boot_time()).strftime("%D %I:%M %p")
 
-        if file != "__pycache__":
+    uname = platform.uname()
 
-          command_count += 1
+    svmem = psutil.virtual_memory()
 
-    bot = f"""
-      Server Count: {len(self.bot.guilds)}
-      User Count: {len(self.bot.users)}
-      Command Count: {command_count}
-      Bot Latency: {str(time.time() - orig_time).split(".")[1][:2]}ms
-      Staff Member(s):
-        - <@633185043774177280> (Developer)
-        - <@666839157502378014> (Management)
-    """
+    cpufreq = psutil.cpu_freq()
 
-    other = f"""
-      Python Version: {str(sys.version).split(" ")[0]}
-      Discord.py Version: {discord.__version__}
-      API Latency: {round(self.bot.latency * 1000)}ms
+    embed = discord.Embed(title = "Prism Statistics", color = 0x126bf1)
 
-      Last updated: {str(datetime.now()).split(" ")[0]}
-    """
+    embed.add_field(
+      name = "Bot Information",
+      value = f"""```
+        Guild Count: {len(self.bot.guilds)}
+        Member Count: {len(self.bot.users)}
+        Command Count: {len(self.bot.commands)}
 
-    embed = discord.Embed(color = 0x126bf1)
+        Latency: {round(self.bot.latency * 1000)}ms
 
-    embed.add_field(name = "Bot Information", value = bot, inline = False)
+        Staff Member(s):
+          - iiPython#0768 (Developer)
+          - Commuter#4083 (Management)```
+      """.replace("  ", ""),
+      inline = False
+    )
 
-    if etc and etc.lower() == "all":
+    embed.add_field(
+      name = "System Information",
+      value = f"""```
+        Running {uname.system} v{uname.version} ({uname.machine})
+        Lastest Boot: {bt}```
+      """.replace("  ", ""),
+      inline = False
+    )
 
-      percore_usage = ""
+    embed.add_field(
+      name = "Processor Information",
+      value = f"""```
+        Physical: {psutil.cpu_count(logical = False)} | Total: {psutil.cpu_count(logical = True)}
+        Frequency: {cpufreq.current:.2f}Mhz
 
-      for i, percentage in enumerate(psutil.cpu_percent(percpu = True, interval = 1)):
-
-        percore_usage = f"{percore_usage}Core {i + 1}: {percentage}%\n"
-
-      svmem = psutil.virtual_memory()
-
-      cpufreq = psutil.cpu_freq()
-
-      boot_time_timestamp = psutil.boot_time()
-
-      bt = datetime.fromtimestamp(boot_time_timestamp)
-
-      uname = platform.uname()
-
-      system = f"""
-        System: {uname.system}
-        Node Name: {uname.node}
-        Release: {uname.release}
-        Version: {uname.version}
-        Machine: {uname.machine}
-        Boot Time: {bt.year}/{bt.month}/{bt.day} {bt.hour}:{bt.minute}:{bt.second}
-      """
-
-      processor = f"""
-        Physical Cores: {psutil.cpu_count(logical = False)}
-        Total Cores: {psutil.cpu_count(logical = True)}
-        Current Frequency: {cpufreq.current:.2f}Mhz
-
-        CPU Usage (per core):
+        Core Usage:
         {percore_usage}
-        Total CPU Usage: {psutil.cpu_percent()}%
-      """
+        CPU Usage: {psutil.cpu_percent()}%```
+      """.replace("  ", ""),
+      inline = False
+    )
 
-      memory = f"""
-        Total: {self.scale_size(svmem.total)}
-        Available: {self.scale_size(svmem.available)}
-        Used: {self.scale_size(svmem.used)}
-        Percentage: {svmem.percent}%
-      """
+    embed.add_field(
+      name = "RAM Information",
+      value = f"""```
+        Total: {self.scale_size(svmem.total)} | Free: {self.scale_size(svmem.available)}
+        Used: {self.scale_size(svmem.used)} | Percentage: {svmem.percent}%```
+      """.replace("  ", ""),
+      inline = False
+    )
 
-      embed.add_field(name = "System Information", value = system, inline = False)
+    embed.add_field(
+      name = "Other Information",
+      value = f"""```
+        Python Version: {str(sys.version).split(" ")[0]}
+        Discord.py Version: {discord.__version__}
 
-      embed.add_field(name = "Processor Information", value = processor, inline = False)
-
-      embed.add_field(name = "Memory Information", value = memory, inline = False)
-
-    embed.add_field(name = "Other Information", value = other, inline = False)
+        Time requested: {datetime.now().strftime("%D %I:%M:%S %p")} CST```
+      """.replace("  ", ""),
+      inline = False
+    )
 
     embed.set_author(name = " | Statistics", icon_url = self.bot.user.avatar_url)
 

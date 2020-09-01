@@ -1,7 +1,8 @@
 # Modules
 import discord
-from assets.prism import Tools
+from random import choice
 
+from assets.prism import Tools
 from discord.ext import commands
 
 # Main Command Class
@@ -21,7 +22,7 @@ class Avatar(commands.Cog):
   @commands.command(aliases = ["pfp", "picture"])
   async def avatar(self, ctx, *, user: str = None):
 
-    user = Tools.getClosestUser(ctx, user if user else ctx.author)
+    user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
     embed = discord.Embed(title = choice(self.options).format(user.name), color = 0x126bf1)
     

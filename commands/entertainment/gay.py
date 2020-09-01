@@ -30,7 +30,7 @@ class Gayness(commands.Cog):
 
           return await ctx.send(embed = Tools.error("NSFW is not enabled in this channel."))
 
-        user = Tools.getClosestUser(ctx, user if user else ctx.author)
+        user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
         rating = randint(0, 100)
 
