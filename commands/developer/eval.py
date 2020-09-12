@@ -4,6 +4,9 @@
 import os
 import ast
 
+import string
+import random
+
 import discord
 
 from assets.prism import Tools
@@ -109,6 +112,42 @@ class Eval(commands.Cog):
 
       return await ctx.send(embed = self._eval_(output, ctx.author, "js"))
 
+    class prism:
+
+      def generateToken(author):
+
+        token = ""
+
+        upper = string.ascii_uppercase
+
+        lower = string.ascii_lowercase
+
+        for char in str(author.id):
+
+          if random.randint(0, 1):
+
+            token += upper[int(char)]
+
+          else:
+
+            token += lower[int(char)]
+
+        c = 1
+
+        while c != random.randint(50, 75):
+
+          if random.randint(0, 1):
+
+            token = token + random.choice(upper)
+          
+          else:
+
+            token = token + random.choice(lower)
+
+          c += 1
+
+        return token
+
     env = {
         "bot": ctx.bot,
         "discord": discord,
@@ -116,7 +155,8 @@ class Eval(commands.Cog):
         "ctx": ctx,
         "__import__": __import__,
         "Tools": Tools,
-        "os": os
+        "os": os,
+        "prism": prism
     }
 
     fn_name = "_eval_expr"
