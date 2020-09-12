@@ -22,9 +22,9 @@ class Work(commands.Cog):
             
             return await ctx.send(embed = Cooldowns.cooldown_text(ctx, "work"))
         
-        n1 = randint(1, 100)
+        n1 = randint(1, 20)
 
-        n2 = randint(1, 100)
+        n2 = randint(1, 20)
 
         answer = n1 + n2
 
