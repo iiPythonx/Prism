@@ -1,10 +1,10 @@
 # Modules
-import random
 import discord
+from random import randint
 
 from json import loads, dumps
-
 from discord.ext import commands
+
 from assets.prism import Cooldowns, Tools
 
 # Main Command Class
@@ -37,98 +37,42 @@ class Rob(commands.Cog):
             return await ctx.send(embed = Tools.error("Stop trying to rob me."))
         
         db = loads(open("db/users", "r").read())
-        
+
         if not str(user.id) in db:
-            
+
             return await ctx.send(embed = Tools.error(f"{user.name} doesn't have an account."))
-        
-        victim = db[str(user.id)]
-        
-        author = db[str(ctx.author.id)]
-        
-        if victim["balance"] < 100:
-          
-          return await ctx.send(embed = Tools.error(f"{user.name} doesn't even have 100 coins."))
-        
-        elif Tools.has_flag(db, user, "protected"):
-          
-          return await ctx.send(embed = Tools.error(f"{user.name} has a Bank Lock active."))
 
-        if random.randint(1, 3) == 1:
-            
-            fine = random.randint(75, 310)
-            
-            author["balance"] -= fine
-            
-            open("db/users", "w").write(dumps(db, indent = 4))
-            
-            await ctx.send(embed = Tools.error(f"You got busted and were fined {fine} coins."))
+        elif db[str(user.id)]["balance"] < 500:
 
-            return await Cooldowns.set_cooldown(ctx, "rob", 3600)
-        
-        number = random.randint(1, 5)
-        
-        if number == 1:
-            
-            author["balance"] += victim["balance"]
-                
-            bal = victim["balance"]
+            return await ctx.send(embed = Tools.error(f"Bruh, {user.name} is poor."))
 
-            victim["balance"] = 0
+        elif db[str(ctx.author.id)]["balance"] < 300:
 
-            embed = discord.Embed(title = f"You just robbed {user.name} for {bal} coins and made them go broke.", color = 0x126bf1)
-            
-            embed.set_author(name = " | Rob", icon_url = self.bot.user.avatar_url)
-            
-            embed.set_footer(text = f" | Robbed by {ctx.author}.", icon_url = ctx.author.avatar_url)
-        
-        elif number in range(2, 4):
-            
-            author["balance"] += round((victim["balance"] / 3) * 2)
+            return await ctx.send(embed = Tools.error("You need at least 300 coins to rob someone."))
 
-            bal = victim["balance"]
+        elif randint(0, 1):
 
-            victim["balance"] -= round((victim["balance"] / 3) * 2)
-                
-            embed = discord.Embed(title = f"You just robbed {user.name} for {round((bal / 3) * 2)} coins.", color = 0x126bf1)
-            
-            embed.set_author(name = " | Rob", icon_url = self.bot.user.avatar_url)
-            
-            embed.set_footer(text = f" | Robbed by {ctx.author}.", icon_url = ctx.author.avatar_url)
+            # user wins
+            earn = randint(250, round(db[str(user.id)]["balance"] / 2))
+
+            db[str(user.id)]["balance"] -= earn
+
+            db[str(ctx.author.id)]["balance"] += earn
+
+            embed = discord.Embed(title = "Nice :ok_hand:", description = f"You just robbed {user.name} and earned `{earn}` coins.", color = 0x126bf1)
 
         else:
-            
-            author["balance"] += round(victim["balance"] / 3)
 
-            bal = victim["balance"]
+            # caught
+            fee = randint(300, round(db[str(ctx.author.id)]["balance"] / 2))
 
-            victim["balance"] -= round(victim["balance"] / 3)
-                
-            embed = discord.Embed(title = f"You just robbed {user.name} for {round(bal / 3)} coins.", color = 0x126bf1)
-            
-            embed.set_author(name = " | Rob", icon_url = self.bot.user.avatar_url)
-            
-            embed.set_footer(text = f" | Robbed by {ctx.author}.", icon_url = ctx.author.avatar_url)
+            db[str(ctx.author.id)]["balance"] -= fee
 
-        try:
+            embed = discord.Embed(title = "L O L", description = f"You failed miserably at robbing {user.name} and got caught!!!111\nYou paid `{fee}` coins as a fee.", color = 0xFF0000)
 
-            await ctx.send(embed = embed)
-        
-        except:
+        embed.set_author(name = " | Rob", icon_url = self.bot.user.avatar_url)
 
-            if number == 1:
-
-                embed = discord.Embed(title = f"You just robbed {user.name} for their whole wallet.", color = 0x126bf1)
-            
-            else:
-
-                embed = discord.Embed(title = f"You just robbed {user.name} for ∞ coins.", color = 0x126bf1)
-            
-            embed.set_author(name = " | Rob", icon_url = self.bot.user.avatar_url)
-            
-            embed.set_footer(text = f" | Robbed by {ctx.author}.", icon_url = ctx.author.avatar_url)
-
-            await ctx.send(embed = embed)
+        embed.set_footer(text = " | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         open("db/users", "w").write(dumps(db, indent = 4))
 

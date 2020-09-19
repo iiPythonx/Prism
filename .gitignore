@@ -5,8 +5,12 @@ __pycache__/
 .env
 
 # Please dont track the dbs plz :)
+# being removed soon
 users
 guilds
+
+# still a wip
+prism.db
 
 # Developer stuff
 .vscode/

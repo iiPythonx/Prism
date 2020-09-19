@@ -34,7 +34,7 @@ class Play(commands.Cog):
 
             except:
 
-                return await ctx.send(embed = Tools.error("Missing permission(s) to join you're voice channel."))
+                return await ctx.send(embed = Tools.error("Missing permission(s) to join your voice channel."))
 
         with youtube_dl.YoutubeDL({}) as ytdl:
 
