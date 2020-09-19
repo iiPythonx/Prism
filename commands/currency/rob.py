@@ -59,6 +59,10 @@ class Rob(commands.Cog):
 
             db[str(ctx.author.id)]["balance"] += earn
 
+            if (str(earn)) > 15:
+
+                earn = "∞"
+
             embed = discord.Embed(title = "Nice :ok_hand:", description = f"You just robbed {user.name} and earned `{earn}` coins.", color = 0x126bf1)
 
         else:
@@ -75,6 +79,8 @@ class Rob(commands.Cog):
         embed.set_footer(text = " | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         open("db/users", "w").write(dumps(db, indent = 4))
+
+        await ctx.send(embed = embed)
 
         return await Cooldowns.set_cooldown(ctx, "rob", 3600)
         
