@@ -1,4 +1,3 @@
-wmi
 dblpy
 psutil
 requests
