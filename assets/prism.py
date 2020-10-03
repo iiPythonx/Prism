@@ -4,23 +4,19 @@
 # Last revision on August 25th, 2020.
 
 # Modules
-from .functions import clear, server_check
-
-
-
-
 import discord
 from random import choice
 
 from asyncio import sleep
-from os import system, name
-
 from .logging import Logging
+
 from json import loads, dumps
+from os import system, listdir
 
 from operator import itemgetter
 from discord.ext import commands, tasks
 
+from .functions import clear, server_check
 from Levenshtein.StringMatcher import StringMatcher
 
 # Bot creation
@@ -218,13 +214,25 @@ class Events:
 
       command = command.split(" ")[0]
 
-    if not command in db[str(user.id)]["data"]["commands"]["used"]:
+    exists = False
 
-      db[str(user.id)]["data"]["commands"]["used"][command] = 0
+    for command_folder in listdir("commands"):
+      
+      for _ in listdir(f"commands/{command_folder}"):
 
-    db[str(user.id)]["data"]["commands"]["used"][command] += 1
+        if _ != "__pycache__" and _.replace(".py", "") == command:
 
-    db[str(user.id)]["data"]["commands"]["sent"] += 1
+          exists = True
+
+    if exists:
+
+      if not command in db[str(user.id)]["data"]["commands"]["used"]:
+
+        db[str(user.id)]["data"]["commands"]["used"][command] = 0
+
+      db[str(user.id)]["data"]["commands"]["used"][command] += 1
+
+      db[str(user.id)]["data"]["commands"]["sent"] += 1
 
     open("db/users", "w").write(dumps(db, indent = 4))
 
