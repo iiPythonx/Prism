@@ -28,25 +28,19 @@ class Play(commands.Cog):
 
         if not voice:
 
-            try:
-
-                voice = await ctx.author.voice.channel.connect()
-
-            except:
-
-                return await ctx.send(embed = Tools.error("Missing permission(s) to join your voice channel."))
+            voice = await ctx.author.voice.channel.connect()
 
         with youtube_dl.YoutubeDL({}) as ytdl:
 
             info = ytdl.extract_info(url, download = False)
-
-        await ctx.send(info["title"])
 
         voice.play(discord.FFmpegPCMAudio(info["formats"][0]["url"]))
 
         voice.source = discord.PCMVolumeTransformer(voice.source)
 
         voice.source.volume = 1
+
+        return await ctx.send(embed = discord.Embed(description = f":musical_note: **Now playing: {info['title']}**", color = 0x126bf1))
 
 # Link to bot
 def setup(bot):

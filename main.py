@@ -1,23 +1,19 @@
 # Prism Discord Bot - Rewrite Edition
 # The only bot you will ever need.
 
-# Last revision: August 7th, 2020.
+# Last revision: October 3rd, 2020.
 # Copyright 2020-20xx MIT; Benjamin O'Brien.
 
 
 # Modules
 from os import getenv, listdir
 from dotenv import load_dotenv
-from assets.prism import BotInstance, Events
+from assets.prism import Bot, Events
 
-# Register our .env file
+# Initialization
 load_dotenv()
 
-# Variables
-auth = getenv("TOKEN")
-
-# Bot instance
-bot = BotInstance.create()
+bot = Bot()
 
 # Commands
 for command_folder in listdir("commands"):
@@ -77,4 +73,4 @@ async def on_message_delete(message):
   return Events.message_delete(message)
 
 # Discord connection
-bot.run(auth, reconnect = True)
+bot.run(getenv("TOKEN"), reconnect = True)

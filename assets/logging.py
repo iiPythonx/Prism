@@ -5,44 +5,53 @@
 from termcolor import colored
 
 # Main class
-class Logging:
-
-  """
-
-    Represents the Prism logging system.
-    This allows you to output errors in a more user-friendly format.
-
-  """
-
-  def error(_, e):
+class Logging():
 
     """
 
-      Prints an error message to the console.
-      By default, in a red message wrapped in "[ERROR]".
+        Represents the Prism logging system.
+        This allows you to output errors in a more user-friendly format.
 
     """
 
-    return print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
+    def __init__(self):
 
-  def warn(_, e):
+        self.warnings = 0
+        self.errors = 0
 
-    """
+    def error(self, e):
 
-      Prints an warning message to the console.
-      By default, in a yellow/orange message wrapped in "[WARN]".
+        """
 
-    """
+        Prints an error message to the console.
+        By default, in a red message wrapped in "[ERROR]".
 
-    return print(colored(f"[WARN]: {e}", "yellow"))
+        """
 
-  def inform(_, e):
+        self.errors += 1
 
-    """
+        return print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
 
-      Prints an informative message to the console.
-      By default, in a green message wrapped in "[INFO]"
+    def warn(self, e):
 
-    """
+        """
 
-    return print(colored(f"[INFO]: {e}", "green"))
+        Prints an warning message to the console.
+        By default, in a yellow/orange message wrapped in "[WARN]".
+
+        """
+
+        self.warnings += 1
+
+        return print(colored(f"[WARN]: {e}", "yellow"))
+
+    def inform(self, e):
+
+        """
+
+        Prints an informative message to the console.
+        By default, in a green message wrapped in "[INFO]"
+
+        """
+
+        return print(colored(f"[INFO]: {e}", "green"))
