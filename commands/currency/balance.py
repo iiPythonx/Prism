@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads, dumps
@@ -35,18 +33,6 @@ class Balance(commands.Cog):
             _bal = "∞"
 
         balance = f"<:coin:733723405118865479>\t{_bal} coins"
-
-        if _user["bank"]["data"]:
-
-            balance += f"\n:bank:\t{_user['bank']['balance']} coins "
-
-            if "protected" in _user["data"]["tags"]:
-
-                balance += "(banklock active)"
-
-            else:
-
-                balance += "(no banklock)"
 
         name = user.name + "'s"
 

@@ -504,10 +504,6 @@ class Constants:
   
   user_preset = {
     "balance": 250,
-    "bank": {
-      "balance": 0,
-      "data": None
-    },
     "pet": {
       "name": None,
       "level": None,
@@ -528,8 +524,7 @@ class Constants:
       "commands": {
         "sent": 0,
         "used": {}
-      },
-      "effects": {}
+      }
     }
   }
 
