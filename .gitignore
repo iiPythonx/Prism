@@ -1,16 +1,16 @@
 # Rid of the pycache
 __pycache__/
+*.pyc
 
 # HIDE THE .ENV AAAAAAAAA
 .env
 
 # Please dont track the dbs plz :)
 # being removed soon
-users
-guilds
+db/
 
-# still a wip
-prism.db
+# No need for vs code stuff
+.vscode/
 
 # Developer stuff
 .vscode/

@@ -4,6 +4,11 @@
 # Last revision on August 25th, 2020.
 
 # Modules
+from .functions import clear, server_check
+
+
+
+
 import discord
 from random import choice
 
@@ -18,83 +23,52 @@ from discord.ext import commands, tasks
 
 from Levenshtein.StringMatcher import StringMatcher
 
-# Classes
-class BotInstance:
+# Bot creation
+def Bot():
 
-  def create():
+  global log, bot
 
-    global log
-    
-    global bot
-
-    log = Logging()
-    
-    bot = commands.Bot(
-      command_prefix = Tools.get_prefix,
-      case_insensitive = True,
-      owner_ids = [
-        633185043774177280,
-        666839157502378014
-      ]
-    )
-    
-    bot.remove_command("help")
-
-    return bot
+  log = Logging()  # might as well setup logging too
   
+  bot = commands.Bot(
+    command_prefix = Tools.get_prefix,
+    case_insensitive = True,
+    owner_ids = [
+      633185043774177280,
+      666839157502378014
+    ]
+  )
+  
+  bot.remove_command("help")  # we replace it with our own
+
+  return bot
+
+# Classes
 class Events:
 
   def on_ready():
 
-    if name == "nt":
-
-      system("cls")
-
-    else:
-
-      system("clear")
+    # Nice startup message
+    clear()
 
     print(f"Logged in as {bot.user}.")
     
     print(f"-------------{'-' * len(str(bot.user))}-")
     
     print()
-    
-    constant = loads(open("db/guilds", "r").read())
 
-    data = loads(open("db/guilds", "r").read())
-    
-    for server in constant:
-        
-      if not bot.get_guild(int(server)):
-          
-        data.pop(server)
-            
-    for server in bot.guilds:
-        
-      if not str(server.id) in constant:
-            
-        data[str(server.id)] = Constants.guild_preset
-    
-    open("db/guilds", "w").write(dumps(data, indent = 4))
+    # Basic server checking
+    # This insures that a server is registered if it added Prism during a downtime.
+    server_check(bot)
 
-    data = loads(open("db/users", "r").read())
-
-    for user in data:
-
-      if "protected" in data[user]["data"]["tags"]:
-
-        data[user]["data"]["tags"].remove("protected")
-
-    open("db/users", "w").write(dumps(data, indent = 4))
-
+    # Start our 15-minute status changer
     try:
 
       return Tools.status_change.start()
     
     except:
 
-      pass
+      return log.warn("Failed to start the status changer, please do this manually.")
 
   async def error_handler(ctx, error):
 
