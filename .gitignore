@@ -6,7 +6,6 @@ __pycache__/
 .env
 
 # Please dont track the dbs plz :)
-# being removed soon
 db/
 
 # No need for vs code stuff
