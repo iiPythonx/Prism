@@ -46,9 +46,11 @@ class Card(commands.Cog):
 
         draw.text((450, 10), f"{ctx.author.name}#{ctx.author.discriminator}", font = font(200, "Regular"), fill = (255, 255, 255))
 
-        draw.line((0, 425) + (3000, 425), fill = (255, 255, 255))
+        draw.line((10, 425) + (3000, 425), fill = (255, 255, 255), width = 10)
 
-        draw.text((450, 225), f"Level {user['data']['levels']['level']}", font = font(150), fill = (255, 255, 255))
+        draw.text((450, 225), f"Level {user['data']['levels']['level']}", font = font(150), fill = (225, 225, 225))
+
+        draw.text((10, 450), f"\"{user['data']['bio']}\"", font = font(125), fill = (255, 255, 255))
 
         # Package the image
         imgByteArr = BytesIO()

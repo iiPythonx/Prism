@@ -20,9 +20,9 @@ class Biography(commands.Cog):
             
             return await ctx.send(embed = Tools.error("Please specify a biography."))
  
-        elif len(bio) > 200:
+        elif len(bio) > 40:
             
-            return await ctx.send(embed = Tools.error("You're biography is way too long."))
+            return await ctx.send(embed = Tools.error("You're biography is way too long (40 characters max)."))
  
         db = json.loads(open("db/users", "r").read())
         
