@@ -30,6 +30,10 @@ class Play(commands.Cog):
 
             voice = await ctx.author.voice.channel.connect()
 
+        elif voice.is_playing():
+
+            voice.stop()
+
         with youtube_dl.YoutubeDL({}) as ytdl:
 
             info = ytdl.extract_info(url, download = False)
@@ -40,7 +44,11 @@ class Play(commands.Cog):
 
         voice.source.volume = 1
 
-        return await ctx.send(embed = discord.Embed(description = f":musical_note: **Now playing: {info['title']}**", color = 0x126bf1))
+        embed = discord.Embed(description = f":musical_note: **Now playing: {info['title']}**", color = 0x126bf1)
+
+        embed.set_footer(text = " | Please note: music is experimental, freezing may occur.", icon_url = ctx.author.avatar_url)
+
+        return await ctx.send(embed = embed)
 
 # Link to bot
 def setup(bot):
