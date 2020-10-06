@@ -57,7 +57,7 @@ class Events:
 
     # Basic server checking
     # This insures that a server is registered if it added Prism during a downtime.
-    server_check(bot)
+    server_check(bot, Constants)
 
     # Start our 15-minute status changer
     try:
