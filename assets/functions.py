@@ -8,44 +8,44 @@ from json import loads, dumps
 # Functions
 def clear():
 
-    if name == "nt":
+  if name == "nt":
 
-      system("cls")
+  system("cls")
 
-    elif name == "posix":
+  elif name == "posix":
 
-      system("clear")
+  system("clear")
 
-    else:
+  else:
 
-        raise SystemError("This is an unsupported operating system.")
+    raise SystemError("This is an unsupported operating system.")
 
-def server_check(bot):
+def server_check(bot, Constants):
 
-    constant = loads(open("db/guilds", "r").read())
+  constant = loads(open("db/guilds", "r").read())
 
-    data = loads(open("db/guilds", "r").read())
-    
-    for server in constant:
+  data = loads(open("db/guilds", "r").read())
+  
+  for server in constant:
+      
+    if not bot.get_guild(int(server)):
         
-      if not bot.get_guild(int(server)):
+      data.pop(server)
           
-        data.pop(server)
-            
-    for server in bot.guilds:
-        
-      if not str(server.id) in constant:
-            
-        data[str(server.id)] = Constants.guild_preset
-    
-    open("db/guilds", "w").write(dumps(data, indent = 4))
+  for server in bot.guilds:
+      
+    if not str(server.id) in constant:
+          
+      data[str(server.id)] = Constants.guild_preset
+  
+  open("db/guilds", "w").write(dumps(data, indent = 4))
 
-    data = loads(open("db/users", "r").read())
+  data = loads(open("db/users", "r").read())
 
-    for user in data:
+  for user in data:
 
-      if "protected" in data[user]["data"]["tags"]:
+    if "protected" in data[user]["data"]["tags"]:
 
-        data[user]["data"]["tags"].remove("protected")
+      data[user]["data"]["tags"].remove("protected")
 
-    open("db/users", "w").write(dumps(data, indent = 4))
+  open("db/users", "w").write(dumps(data, indent = 4))
