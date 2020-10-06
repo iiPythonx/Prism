@@ -31,7 +31,7 @@ If you have all of those installed, run these commands in a terminal:
 
 ```
 
-git clone https://github.com/ii-Python/Prism/Prism.git
+git clone https://github.com/ii-Python/Prism
 
 cd Prism
 
@@ -44,9 +44,6 @@ python setup.py
 
 
 When all of that is complete, you can start Prism by running `python main.py`.
-
-  
-
 
 Thanks for reading! 😄
 
