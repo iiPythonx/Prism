@@ -30,5 +30,5 @@ python setup.py
 When all of that is complete, you can start Prism by running `python main.py`.
 
 Thanks for reading! 😄
-Last update: `8/23/2020`
+Last update: `10/6/2020`
 
