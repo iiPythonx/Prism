@@ -22,9 +22,9 @@ if not exists("db/users"):
 
     print("\tcreated users database")
 
-if not exists("db/guild"):
+if not exists("db/guilds"):
 
-    open("db/users", "w+").write(dumps({}))
+    open("db/guilds", "w+").write(dumps({}))
 
     print("\tcreated guilds database")
 
