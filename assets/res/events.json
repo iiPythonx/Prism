@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Happy Halloween!!! :ghost:",
+        "emoji": ":jack_o_lantern:",
+        "color": "EB6123",
+        "timeData": {
+            "month": 10,
+            "range": "31-31"
+        }
+    },
+    {
+        "name": "Merry Christmas!",
+        "emoji": ":santa:",
+        "color": "FFFFFA",
+        "timeData": {
+            "month": 12,
+            "range": "25-25"
+        }
+    }
+]

@@ -9,47 +9,25 @@ It is built in Python using `discord.py`.
 
 #### Setup
 
-##### Step 1
-To get started with Prism, first you need to clone the repository.
-To do this, pop into a terminal and enter: `git clone https://github.com/ii-Python/Prism.git`.
+Getting started with Prism is pretty easy thanks to Prism 1.4.
+However, before you continue make sure you have the following installed:
+    - Python 3.6 or above
+    - Git
 
-Upon completion, you should have a new folder called `Prism`.
+If you have all of those installed, run these commands in a terminal:
 
-##### Step 2
-In order to begin using Prism, you need to install the dependencies.
-Go into the `Prism` folder and open a new terminal.
-
-Then install the dependencies via pip: `pip install -r requirements.txt`.
-
-##### Step 3
-Next, you need to create the database files.
-Currently, Prism uses a json database (though we will be switching to mongodb soon).
-
-So, create a new folder called `db`.
-Inside of `db`, create 2 files labeled `users` and `guilds`.
-
-IMPORTANT: Make sure the files **DO NOT** have a file extension!
-
-##### Step 4
-The final step to running Prism is setting up the configuration.
-To do this, create a file called `.env` in the root of the directory.
-
-Label the file like so:
 ```
-TOKEN = "Get this token from https://discord.com/developers/applications"
+git clone https://github.com/ii-Python/Prism/Prism.git
 
-WOLFRAMALPHA_KEY = "Get this token from https://developer.wolframalpha.com/portal/myapps"
+cd Prism
+
+python setup.py
 ```
 
-Then your going to want to comment out line 32 in `main.py`.
-
-##### Final Steps
-Finally, after all of that, your ready to start Prism.
-To do this, open up a terminal in the root of the directory.
-
-To start Prism, run the following: `python main.py`.
-
+*Please note: if you use linux you might have to use `python3` rather than `python.`*
 ---
+
+When all of that is complete, you can start Prism by running `python main.py`.
 
 Thanks for reading! 😄
 Last update: `8/23/2020`
