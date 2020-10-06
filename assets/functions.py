@@ -10,11 +10,11 @@ def clear():
 
   if name == "nt":
 
-  system("cls")
+    system("cls")
 
   elif name == "posix":
 
-  system("clear")
+    system("clear")
 
   else:
 
