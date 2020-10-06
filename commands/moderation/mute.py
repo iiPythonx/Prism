@@ -30,6 +30,18 @@ class Mute(commands.Cog):
                 
                 await channel.set_permissions(muted, send_messages = False)
 
+        is_muted = False
+
+        for role in user.roles:
+            
+            if role.name == "Muted":
+                
+                is_muted = True
+
+        if is_muted:
+
+            return await ctx.send(embed = Tools.error(f"{user.name} is already muted."))
+
         await user.add_roles(muted)
 
         embed = discord.Embed(title = f"{user} has been muted.", color = 0x126bf1)

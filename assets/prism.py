@@ -13,10 +13,12 @@ from .logging import Logging
 from json import loads, dumps
 from os import system, listdir
 
+from assets.args import has_arg
 from operator import itemgetter
-from discord.ext import commands, tasks
 
+from discord.ext import commands, tasks
 from .functions import clear, server_check
+
 from Levenshtein.StringMatcher import StringMatcher
 
 # Bot creation
@@ -104,7 +106,9 @@ class Events:
 
     embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
 
-    embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
+    if has_arg("--debug"):
+
+      embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
 
     await ctx.send(embed = embed)
 
