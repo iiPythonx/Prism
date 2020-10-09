@@ -1,8 +1,6 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
-from os import path
+from os import path, listdir
 
 from assets.prism import Tools
 from discord.ext import commands
@@ -23,23 +21,33 @@ class Reload(commands.Cog):
             
           return await ctx.send(embed = Tools.error("Please specify a module to reload."))
 
-        elif not "." in module or not path.exists(module.replace(".", "/") + ".py"):
+        path = None
+
+        for folder in listdir("commands"):
+
+            for file in listdir(f"commands/{folder}"):
+
+                if file == f"{module}.py":
+
+                    path = f"commands.{folder}.{module}"
+        
+        if not path:
 
           return await ctx.send(embed = Tools.error("The specified module does not exist."))
 
         try:
 
-            self.bot.unload_extension(module)
+            self.bot.unload_extension(path)
 
-            self.bot.load_extension(module)
+            self.bot.load_extension(path)
             
         except Exception as e:
             
-            await ctx.author.send(f"```Module {module.split('.')[2]} failed to reload:\n\n{e}```")
-            
-            return await ctx.send(embed = Tools.error(f"Module {module.split('.')[2]} failed to reload."))
+            embed = discord.Embed(title = f"Module `{path}` failed to reload.", description = f"```\n{e}\n```", color = 0xFF0000)
 
-        embed = discord.Embed(title = f"The {module.split('.')[2]} module has been reloaded.", color = 0x126bf1)
+            return await ctx.send(embed = embed)
+
+        embed = discord.Embed(title = f"The `{path}` module has been reloaded.", color = 0x126bf1)
         
         embed.set_author(name = " | Module Reload", icon_url = self.bot.user.avatar_url)
         

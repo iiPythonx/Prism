@@ -40,6 +40,10 @@ class Eval(commands.Cog):
 
   def _eval_(self, output, user, lang = "py"):
 
+    if not output:
+
+      output = "[no output]"
+
     description = f"```{lang}\n{output}\n```"
 
     embed = discord.Embed(title = f"Evaluated in {round(self.bot.latency * 1000)}ms.", description = description, color = 0x126bf1)
@@ -71,10 +75,6 @@ class Eval(commands.Cog):
     if not cmd:
       
       return await ctx.send(embed = Tools.error("No code provided."))
-
-    print(f"Eval used by {ctx.author}:")
-
-    print(f"  {cmd}")
 
     if cmd[3:].startswith("py") or cmd[3:].startswith("python"):
 
@@ -112,42 +112,6 @@ class Eval(commands.Cog):
 
       return await ctx.send(embed = self._eval_(output, ctx.author, "js"))
 
-    class prism:
-
-      def generateToken(author):
-
-        token = ""
-
-        upper = string.ascii_uppercase
-
-        lower = string.ascii_lowercase
-
-        for char in str(author.id):
-
-          if random.randint(0, 1):
-
-            token += upper[int(char)]
-
-          else:
-
-            token += lower[int(char)]
-
-        c = 1
-
-        while c != random.randint(50, 75):
-
-          if random.randint(0, 1):
-
-            token = token + random.choice(upper)
-          
-          else:
-
-            token = token + random.choice(lower)
-
-          c += 1
-
-        return token
-
     env = {
         "bot": ctx.bot,
         "discord": discord,
@@ -156,7 +120,6 @@ class Eval(commands.Cog):
         "__import__": __import__,
         "Tools": Tools,
         "os": os,
-        "prism": prism
     }
 
     fn_name = "_eval_expr"
