@@ -32,7 +32,7 @@ class Roast(commands.Cog):
             
             return await ctx.send("who do you want to roast????")
         
-        user = Tools.getClosestUser(ctx, user)
+        user = await Tools.getClosestUser(ctx, user)
 
         if not user:
 

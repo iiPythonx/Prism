@@ -13,7 +13,7 @@ from .logging import Logging
 from json import loads, dumps
 from os import system, listdir
 
-from assets.args import has_arg
+from .config import fetch_value
 from operator import itemgetter
 
 from discord.ext import commands, tasks
@@ -58,6 +58,9 @@ class Events:
     # Basic server checking
     # This insures that a server is registered if it added Prism during a downtime.
     server_check(bot, Constants)
+
+    # Check that our config file is valid
+    fetch_value("")
 
     # Start our 15-minute status changer
     try:
@@ -106,7 +109,7 @@ class Events:
 
     embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
 
-    if has_arg("--debug"):
+    if fetch_value("DEBUG"):
 
       embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
 
