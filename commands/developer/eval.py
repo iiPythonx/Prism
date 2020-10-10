@@ -1,15 +1,10 @@
-# Prism Rewrite - Basic Command
-
 # Modules
-import os
 import ast
-
-import string
-import random
-
 import discord
 
+from datetime import datetime
 from assets.prism import Tools
+
 from discord.ext import commands
 
 # Main Command Class
@@ -38,35 +33,33 @@ class Eval(commands.Cog):
         
       self.insert_returns(body[-1].body)
 
-  def _eval_(self, output, user, lang = "py"):
+  def _eval_(self, ctx, output, start):
 
     if not output:
 
       output = "[no output]"
 
-    description = f"```{lang}\n{output}\n```"
+    # fetch the time taken
+    time = round((datetime.now() - start).total_seconds() * 1000)
+    timeframe = "ms"
 
-    embed = discord.Embed(title = f"Evaluated in {round(self.bot.latency * 1000)}ms.", description = description, color = 0x126bf1)
+    if time > 1000:
+
+      timeframe = " seconds"
+      time = round(time / 1000, 1)
+
+      if time > 60:
+
+        timeframe = " minutes"
+        time = round(time / 60, 1)
+
+    embed = discord.Embed(title = f"Evaluated in {time}{timeframe}.", description = f"```py\n{output}\n```", color = 0x126bf1)
 
     embed.set_author(name = " | Evaluation", icon_url = self.bot.user.avatar_url)
 
-    embed.set_footer(text = f" | Requested by {user.name}.", icon_url = user.avatar_url)
+    embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
     return embed
-
-  def _js_exec(self, code):
-
-      open("assets/temp/jscode.js", "w+").write(code)
-
-      os.system("node assets/temp/jscode.js > assets/temp/jsoutput 2>&1")
-
-      output = open("assets/temp/jsoutput", "r").read()
-
-      os.remove("assets/temp/jscode.js")
-
-      os.remove("assets/temp/jsoutput")
-
-      return output
 
   @commands.command(name = "eval")
   @commands.is_owner()
@@ -84,42 +77,12 @@ class Eval(commands.Cog):
 
         cmd = cmd[4:]
 
-    elif cmd[3:].startswith("js") or cmd[3:].startswith("javascript"):
-
-      cmd = cmd[5:]
-
-      cmd = cmd[:-3]
-
-      lines = cmd.split("\n")
-
-      cmd = ""
-
-      for line in lines[1:]:
-
-        cmd = f"{cmd}{line}\n"   
-
-      output = self._js_exec(cmd)
-
-      lines = output.split("\n")
-
-      lines_compiled = ""
-
-      for line in lines:
-
-        lines_compiled = f"{lines_compiled}{line}\n"
-
-      output = lines_compiled.split("    at ")[0]
-
-      return await ctx.send(embed = self._eval_(output, ctx.author, "js"))
-
     env = {
-        "bot": ctx.bot,
-        "discord": discord,
-        "commands": commands,
-        "ctx": ctx,
-        "__import__": __import__,
-        "Tools": Tools,
-        "os": os,
+      "bot": ctx.bot,
+      "discord": discord,
+      "commands": commands,
+      "ctx": ctx,
+      "Tools": Tools,
     }
 
     fn_name = "_eval_expr"
@@ -129,6 +92,8 @@ class Eval(commands.Cog):
     cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
 
     body = f"async def {fn_name}():\n{cmd}"
+
+    start = datetime.now()
 
     try:
 
@@ -142,15 +107,11 @@ class Eval(commands.Cog):
       
       result = (await eval(f"{fn_name}()", env))
 
-      if isinstance(result, discord.message.Message):
-
-        result = result.content
-
-      return await ctx.send(embed = self._eval_(result, ctx.author))
+      return await ctx.send(embed = self._eval_(ctx, result, start))
 
     except Exception as e:
 
-      return await ctx.send(embed = self._eval_(e, ctx.author))
+      return await ctx.send(embed = self._eval_(ctx, e, start))
 
 # Link to bot
 def setup(bot):
