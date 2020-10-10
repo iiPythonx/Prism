@@ -30,7 +30,30 @@ class Logging():
 
         self.errors += 1
 
-        return print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
+        if "exception" in e:
+
+            return print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
+
+        return print(colored(f"[ERROR]: {e}", "red"))
+
+    def crash(self, e):
+
+        """
+
+        Prints a crash message to the console.
+        By default, in a red message wrapped in "[ERROR]".
+
+        WARNING: THIS WILL TERMINATE THE APPLICATION!
+
+        """
+
+        if "exception" in e:
+
+            print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
+
+        print(colored(f"[ERROR]: {e}", "red"))
+
+        exit()
 
     def warn(self, e):
 
