@@ -60,7 +60,7 @@ class Events:
     server_check(bot, Constants)
 
     # Check that our config file is valid
-    fetch_value("")
+    fetch_value()
 
     # Start our 15-minute status changer
     try:
