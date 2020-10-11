@@ -513,6 +513,66 @@ class Tools:
 
     return ctx.guild.get_member(id)
 
+  async def getBannedUser(ctx, user):
+
+    user = str(user).lower()
+
+    matcher = StringMatcher()
+
+    userdata = []
+
+    for _user in ctx.guild.bans():
+
+      _user = _user.user
+
+      member = {
+        "name": _user.name,
+        "fullname": _user.name + "#" + str(_user.discriminator),
+        "mention": "<@!" + str(_user.id) + ">",
+        "nickname": _user.display_name,
+        "discriminator": str(_user.discriminator),
+        "discrim2": "#" + str(_user.discriminator),
+        "id": str(_user.id)
+      }
+
+      data = {}
+
+      for item in member:
+
+        matcher.set_seqs(user, member[item].lower())
+
+        data[item] = matcher.quick_ratio()
+
+      data["_id"] = member["id"]
+
+      userdata.append(data)
+
+    matches = {}
+
+    for user in userdata:
+
+      for key in user:
+
+        if key != "_id":
+
+          if user[key] > .5:
+
+            matches[user["_id"]] = user[key]
+
+            break
+
+    if not matches:
+
+      raise ValueError(f"NoSuchUser: {user}")
+
+    id = int(max(matches.items(), key = itemgetter(1))[0])
+
+    for banned in ctx.guild.bans():
+
+      if banned.user.id == id:
+
+        return banned.user
+        
 class Constants:
   
   alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
