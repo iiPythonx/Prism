@@ -40,10 +40,6 @@ class Update(commands.Cog):
 
         verification = f":white_check_mark:" if commit["verification"]["verified"] else ":x:"
 
-        if commit["verification"]["signature"]:
-
-            verification += f" ({commit['verification']['signature']})"
-
         embed = discord.Embed(title = commit["message"], url = "https://github.com/ii-Python/Prism/commit/" + commit["url"].split("/")[-1], color = 0x126bf1)
         
         embed.add_field(name = "Pushed by", value = r[0]["committer"]["login"], inline = False)
