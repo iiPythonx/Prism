@@ -14,13 +14,13 @@ class Unban(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members = True)
-    async def unban(self, ctx, user: str = None):
+    async def unban(self, ctx, *, user: str = None):
     
         if not user:
             
             return await ctx.send(embed = Tools.error("Please specify a user to unban."))
 
-        user = tools.getBannedUser(user)
+        user = Tools.getBannedUser(user)
 
         try:
 
