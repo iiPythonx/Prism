@@ -521,7 +521,7 @@ class Tools:
 
     userdata = []
 
-    for _user in ctx.guild.bans():
+    for _user in await ctx.guild.bans():
 
       _user = _user.user
 
@@ -567,12 +567,12 @@ class Tools:
 
     id = int(max(matches.items(), key = itemgetter(1))[0])
 
-    for banned in ctx.guild.bans():
+    for banned in await ctx.guild.bans():
 
       if banned.user.id == id:
 
         return banned.user
-        
+
 class Constants:
   
   alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
