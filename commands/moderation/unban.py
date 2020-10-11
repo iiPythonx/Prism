@@ -20,7 +20,7 @@ class Unban(commands.Cog):
             
             return await ctx.send(embed = Tools.error("Please specify a user to unban."))
 
-        user = Tools.getBannedUser(user)
+        user = await Tools.getBannedUser(user)
 
         try:
 
