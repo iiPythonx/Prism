@@ -18,7 +18,7 @@ class Update(commands.Cog):
     @commands.command()
     async def update(self, ctx):
 
-        await ctx.send(embed = discord.Embed(title = "Fetching commits..", color = 0x126bf1), delete_after = 0)
+        await ctx.send(embed = discord.Embed(title = "Fetching commits...", color = 0x126bf1), delete_after = 0)
         
         try:
 
