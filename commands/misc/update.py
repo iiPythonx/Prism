@@ -18,7 +18,7 @@ class Update(commands.Cog):
     @commands.command()
     async def update(self, ctx):
 
-        m = await ctx.send(embed = discord.Embed(title = "Fetching commits..", color = 0x126bf1))
+        await ctx.send(embed = discord.Embed(title = "Fetching commits..", color = 0x126bf1), delete_after = 0)
         
         try:
 
@@ -34,11 +34,9 @@ class Update(commands.Cog):
         
         except:
 
-            return await ctx.send(embed = Tools.error("Sorry, something went wrong while fetching update."))
+            return await ctx.send(embed = Tools.error("Sorry, something went wrong while fetching updates."))
 
         commit = r[0]["commit"]
-
-        date = commit["committer"]["date"].split("T")[0]
 
         verification = f":white_check_mark:" if commit["verification"]["verified"] else ":x:"
 
@@ -48,11 +46,11 @@ class Update(commands.Cog):
 
         embed = discord.Embed(title = commit["message"], url = "https://github.com/ii-Python/Prism/commit/" + commit["url"].split("/")[-1], color = 0x126bf1)
         
-        embed.add_field(name = "Pushed by", value = commit["committer"]["name"], inline = False)
+        embed.add_field(name = "Pushed by", value = r[0]["committer"]["login"], inline = False)
 
         embed.add_field(name = "Push verified", value = verification, inline = False)
 
-        embed.add_field(name = "Pushed on", value = date, inline = False)
+        embed.add_field(name = "Pushed on", value = commit["committer"]["date"].split("T")[0], inline = False)
 
         embed.set_author(name = " | Update", icon_url = self.bot.user.avatar_url)
         
