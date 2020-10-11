@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from random import choice
@@ -12,35 +10,24 @@ class Roast(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.desc = "Lets Commuter roast somebody"
+        self.desc = "Roasts somebody with an array of epic roasts"
         self.usage = "roast [user]"
 
         self.roasts = [
             "ass",
-            "shUT UP"
+            "{}, shUT UP."
         ]
 
     @commands.command()
-    @commands.is_owner()
     async def roast(self, ctx, user = None):
 
-        if not ctx.author.id == 666839157502378014:
-
-            return await ctx.send("idiot you arent commuter")
-
-        elif not user:
+        if not user:
             
-            return await ctx.send("who do you want to roast????")
+            return await ctx.send(embed = Tools.error("You expect to roast the air?"))
         
         user = await Tools.getClosestUser(ctx, user)
 
-        if not user:
-
-            return await ctx.send("that isnt a person")
-
-        await ctx.send("Commuter is thinking of a roast..")
-
-        embed = discord.Embed(title = f"{user.name}, {choice(self.roasts)}", color = 0x126bf1)
+        embed = discord.Embed(title = choice(self.roasts).format(user.name), color = 0x126bf1)
         
         embed.set_footer(text = f" | Roasted and toasted by {ctx.author}.", icon_url = ctx.author.avatar_url)
 

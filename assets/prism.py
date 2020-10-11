@@ -481,7 +481,7 @@ class Tools:
 
         matcher.set_seqs(user, member[item].lower())
 
-        data[item] = matcher.ratio()
+        data[item] = matcher.quick_ratio()
 
       data["_id"] = member["id"]
 
@@ -495,7 +495,7 @@ class Tools:
 
         if key != "_id":
 
-          if user[key] > .6:
+          if user[key] > .5:
 
             matches[user["_id"]] = user[key]
 
@@ -503,7 +503,7 @@ class Tools:
 
     if not matches:
 
-      raise ValueError("NoSuchUser")
+      raise ValueError(f"NoSuchUser: {user}")
 
     id = int(max(matches.items(), key = itemgetter(1))[0])
 
