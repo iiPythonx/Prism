@@ -17,4 +17,13 @@
             "range": "25-25"
         }
     }
+    {
+        "name": "Happy birthday, Commuter!",
+        "emoji": "<:diaperfan:759599489505427536>",
+        "color": "FF08E7",
+        "timeData": {
+            "month": 10,
+            "range": "11-11"
+        }
+    }
 ]
