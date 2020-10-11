@@ -1,7 +1,5 @@
 # Modules
 import discord
-from asyncio import sleep
-
 from assets.prism import Tools
 from discord.ext import commands
 
@@ -19,27 +17,23 @@ class Purge(commands.Cog):
 
         if amount > 100:
             
-            return await ctx.send(embed = Tools.error("The API doesn't allow more than 100 messages deleted at a time."))
+            return await ctx.send(embed = Tools.error("You cannot delete more than 100 messages at a time."))
 
-        await ctx.channel.purge(limit = amount + 1)
+        try:
 
-        embed = discord.Embed(title = f"I have deleted {amount} messages from #{ctx.channel.name}.", color = 0x126bf1)
+            await ctx.channel.purge(limit = amount + 1)
+
+        except:
+
+            return await ctx.send(embed = Tools.error("Something went wrong while deleting those."))
+
+        embed = discord.Embed(title = f"{amount} messages have been deleted from #{ctx.channel.name}.", color = 0x126bf1)
         
         embed.set_author(name = " | Purge", icon_url = self.bot.user.avatar_url)
         
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
-        message = await ctx.send(embed = embed)
-        
-        await sleep(3)
-        
-        try:
-            
-            return await message.delete()
-
-        except:
-
-            pass
+        message = await ctx.send(embed = embed, delete_after = 3)
 
 # Link to bot
 def setup(bot):
