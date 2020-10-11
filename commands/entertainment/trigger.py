@@ -26,7 +26,7 @@ class Trigger(commands.Cog):
 
             for trigger in _db["data"]["triggers"]:
 
-                triggers += f"`{trigger}`: {_db['data']['triggers'][trigger]}\n"
+                triggers += f"{trigger}: {_db['data']['triggers'][trigger]}\n"
 
             if not triggers:
 
@@ -48,7 +48,15 @@ class Trigger(commands.Cog):
 
             if not "|" in trigger:
 
-                return await ctx.send(embed = Tools.error("Invalid trigger; `example: haha|no laughing!`."))
+                return await ctx.send(embed = Tools.error("Invalid trigger; example: `haha|no laughing!`."))
+
+            elif len(_db["data"]["triggers"]) >= 20:
+
+                return await ctx.send(embed = Tools.error("You can have a maximum of 20 triggers."))
+
+            elif len(trigger) > 80:
+
+                return await ctx.send(embed = Tools.error("Triggers can have a maximum length of 80 characters."))
 
             data = trigger.split("|")
 
@@ -58,7 +66,7 @@ class Trigger(commands.Cog):
 
             if not response:
 
-                return await ctx.send(embed = Tools.error("Invalid trigger; `example: haha|no laughing!`."))
+                return await ctx.send(embed = Tools.error("Invalid trigger; example: `haha|no laughing!`."))
 
             _db["data"]["triggers"][trigger] = response
 
