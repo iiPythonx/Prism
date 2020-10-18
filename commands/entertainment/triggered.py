@@ -37,11 +37,11 @@ class Triggered(commands.Cog):
 
         while num < 100:
 
-            canvas.paste(image, (randint(-2, 2), randint(-2, 2)))
+            canvas.paste(image, (randint(-4, 4), randint(-4, 4)))
 
             images.append(canvas)
 
-            canvas.paste(text, (randint(-2, 2), (216 - 39) + (randint(-2, 2))))
+            canvas.paste(text, (randint(-4, 4), (216 - 39) + (randint(-4, 4))))
 
             canvas = Image.new(mode = "RGB", size = image.size, color = (0, 0, 0))
 
