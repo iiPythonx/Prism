@@ -37,29 +37,3 @@ def compileGIF(images, duration):
     arr.seek(0)
 
     return arr
-
-def imagetoascii(url):
-
-    """Pretty damn self explanatory"""
-
-    im = ImageOps.flip(imagefromURL(url).resize((300, 300)).rotate(90).convert("RGB"))
-
-    im = im.resize((int(list(im.size)[0] / 3) - 60, int(list(im.size)[1] / 3)))
-
-    total_str = ""
-
-    for i in range(im.width):
-
-        for j in range(im.height):
-
-            br = round(sum(im.getpixel((i, j))) / 3)
-
-            if br in range(0, 50): total_str += "."
-            elif br in range(50, 100): total_str += "/"
-            elif br in range(100, 150): total_str += "$"
-            elif br in range(150, 200): total_str += "#"
-            else: total_str += '@'
-
-            total_str += "\n"
-
-    return total_str
