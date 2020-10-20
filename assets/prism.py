@@ -309,27 +309,27 @@ class Events:
 
   async def member_left(member):
 
-      db = loads(open("db/guilds", "r").read())
+    db = loads(open("db/guilds", "r").read())
+    
+    if db[str(member.guild.id)]["data"]["joinleave_channel"]:
       
-      if db[str(member.guild.id)]["data"]["joinleave_channel"]:
-        
-        channel = bot.get_channel(int(db[str(member.guild.id)]["data"]["joinleave_channel"]))
-        
-        embed = discord.Embed(description = f"Sorry to see you go, {member.name}. Enjoy the rest of Discord.", color = 0x126bf1)
-        
-        embed.set_author(name = " | Member Left", icon_url = bot.user.avatar_url)
-        
-        embed.set_footer(text = f" | New user count: {len(member.guild.members)}", icon_url = member.guild.icon_url)
-        
-        try:
-        
-          return await channel.send(embed = embed)
-        
-        except:
-            
-          db[str(member.guild.id)]["data"]["joinleave_channel"] = None
+      channel = bot.get_channel(int(db[str(member.guild.id)]["data"]["joinleave_channel"]))
+      
+      embed = discord.Embed(description = f"Sorry to see you go, {member.name}. Enjoy the rest of Discord.", color = 0x126bf1)
+      
+      embed.set_author(name = " | Member Left", icon_url = bot.user.avatar_url)
+      
+      embed.set_footer(text = f" | New user count: {len(member.guild.members)}", icon_url = member.guild.icon_url)
+      
+      try:
+      
+        return await channel.send(embed = embed)
+      
+      except:
+          
+        db[str(member.guild.id)]["data"]["joinleave_channel"] = None
 
-          return open("db/guilds", "w").write(dumps(db, indent = 4))
+        return open("db/guilds", "w").write(dumps(db, indent = 4))
 
   def message_delete(message):
 
@@ -393,7 +393,7 @@ class Tools:
   def uppercase(text):
       
     return text[0].upper() + text[1:]
-  
+
   @tasks.loop(minutes = 15)
   async def status_change():
     
@@ -614,7 +614,8 @@ class Constants:
       "deleted_messages": [],
       "last_updated": "Never",
       "autorole": None,
-      "triggers": {}
+      "triggers": {},
+      "automod": {}
     }
   }
 
