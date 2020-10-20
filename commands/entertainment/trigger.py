@@ -17,80 +17,83 @@ class Trigger(commands.Cog):
     async def trigger(self, ctx, option: str = None, *, trigger: str = None):
 
         db = loads(open("db/guilds", "r").read())
+        triggers = db[str(ctx.guild.id)]["data"]["triggers"]
 
-        _db = db[str(ctx.guild.id)]
+        if not option:
 
-        if not option and not trigger:
+            triggerlist, index = "", 1
 
-            triggers = ""
+            for trigger in triggers:
 
-            for trigger in _db["data"]["triggers"]:
+                triggerlist += f"(#{index}) `{trigger}`: {triggers[trigger]} \n"
 
-                triggers += f"{trigger}: {_db['data']['triggers'][trigger]}\n"
+                index += 1
 
-            if not triggers:
+            if not triggerlist:
 
-                triggers = "No triggers on this server."
+                triggerlist = "No triggers to display."
 
-            embed = discord.Embed(title = "Server Triggers", description = triggers, color = 0x126bf1)
-
-            embed.set_author(name = " | Triggers", icon_url = self.bot.user.avatar_url)
-
-            embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
-
-            return await ctx.send(embed = embed)
+            embed = discord.Embed(title = "Server Triggers", description = triggerlist, color = 0x126bf1)
 
         elif not trigger:
 
-            return await ctx.send(embed = Tools.error("No option specified; valid options are `add`, and `delete`."))
+            return await ctx.send(embed = Tools.error("No trigger data specified."))
 
-        elif option.lower() == "add":
+        elif "`" in trigger:
 
-            if not "|" in trigger:
-
-                return await ctx.send(embed = Tools.error("Invalid trigger; example: `haha|no laughing!`."))
-
-            elif len(_db["data"]["triggers"]) >= 20:
-
-                return await ctx.send(embed = Tools.error("You can have a maximum of 20 triggers."))
-
-            elif len(trigger) > 80:
-
-                return await ctx.send(embed = Tools.error("Triggers can have a maximum length of 80 characters."))
-
-            data = trigger.split("|")
-
-            trigger = data[0]
-
-            response = data[1]
-
-            if not response:
-
-                return await ctx.send(embed = Tools.error("Invalid trigger; example: `haha|no laughing!`."))
-
-            _db["data"]["triggers"][trigger] = response
-
-            embed = discord.Embed(title = f"Trigger #{len(_db['data']['triggers'])} saved.", color = 0x126bf1)
-
-        elif option.lower() == "delete":
-
-            if not trigger in _db["data"]["triggers"]:
-
-                return await ctx.send(embed = Tools.error("No such trigger exists."))
-
-            _db["data"]["triggers"].pop(trigger)
-
-            embed = discord.Embed(title = f"Trigger deleted.", color = 0x126bf1)
+            return await ctx.send(embed = Tools.error("Triggers cannot contain the ` character."))
 
         else:
 
-            embed = discord.Embed(title = "Invalid option.", description = "Valid options are `add`, and `delete`.", color = 0x126bf1)
+            if option in ["add", "create", "make"]:
 
-        embed.set_author(name = " | Triggers", icon_url = self.bot.user.avatar_url)
+                if not "|" in trigger or trigger.count("|") > 1:
 
-        embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
+                    return await ctx.send(embed = Tools.error("Invalid trigger specified, example: `hello|world`."))
+
+                elif len(trigger) > 90:
+
+                    return await ctx.send(embed = Tools.error("Triggers have a maximum length of 90 characters."))
+
+                elif len(triggers) == 20:
+
+                    return await ctx.send(embed = Tools.error("You can have a maximum of 20 triggers."))
+
+                raw = trigger.split("|")
+
+                name = raw[0]
+                data = raw[1]
+
+                if name in triggers:
+
+                    return await ctx.send(embed = Tools.error("That trigger already exists."))
+
+                elif name.startswith(" ") or name.endswith(" "):
+
+                    return await ctx.send(embed = Tools.error("Trigger names cannot start or end with a space."))
+
+                triggers[name] = data
+            
+                embed = discord.Embed(title = f"Trigger #{len(triggers)} created.", color = 0x126bf1)
+
+            elif option in ["remove", "delete"]:
+
+                if trigger not in triggers:
+
+                    return await ctx.send(embed = Tools.error("No such trigger exists."))
+
+                triggers.pop(trigger)
+
+                embed = discord.Embed(title = "Trigged deleted.", color = 0x126bf1)
+
+            else:
+
+                return await ctx.send(embed = Tools.error("Invalid (or unknown) option specified."))
 
         open("db/guilds", "w").write(dumps(db, indent = 4))
+
+        embed.set_author(name = " | Triggers", icon_url = self.bot.user.avatar_url)
+        embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)
 
