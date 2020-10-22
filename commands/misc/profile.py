@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads
@@ -34,7 +32,7 @@ class Profile(commands.Cog):
 
       pet_level = data["pet"]["level"]
       
-      if len(str(pet_level)) > 100:
+      if len(str(pet_level)) > 50:
           
         pet_level = "∞"
 
@@ -52,7 +50,7 @@ class Profile(commands.Cog):
 
     balance = str(data["balance"])
 
-    if len(balance) > 100:
+    if len(balance) > 50:
         
         balance = "∞"
 
