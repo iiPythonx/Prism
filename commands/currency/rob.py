@@ -59,7 +59,7 @@ class Rob(commands.Cog):
 
             db[str(ctx.author.id)]["balance"] += earn
 
-            if (str(earn)) > 15:
+            if len(str(earn)) > 15:
 
                 earn = "∞"
 
