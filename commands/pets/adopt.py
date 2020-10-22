@@ -58,7 +58,7 @@ class Adopt(commands.Cog):
             }
         }
 
-    @commands.command()
+    @commands.command(aliases = ["petshop", "pets"])
     async def adopt(self, ctx, *, pet = None):
 
         if not pet:
