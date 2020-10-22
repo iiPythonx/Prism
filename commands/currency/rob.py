@@ -76,7 +76,7 @@ class Rob(commands.Cog):
 
         embed.set_author(name = " | Rob", icon_url = self.bot.user.avatar_url)
 
-        embed.set_footer(text = " | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
+        embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         open("db/users", "w").write(dumps(db, indent = 4))
 
