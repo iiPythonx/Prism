@@ -50,7 +50,7 @@ class Rob(commands.Cog):
 
             return await ctx.send(embed = Tools.error("You need at least 300 coins to rob someone."))
 
-        elif Tools.has_flag(user, "protected"):
+        elif Tools.has_flag(db, user, "protected"):
 
             return await ctx.send(embed = Tools.error(f"{user.name} has a bank lock active."))
 
