@@ -51,7 +51,7 @@ class Warn(commands.Cog):
         
         else:
 
-            if len(db[str(user.id)]["warnings"][str(ctx.guild.id)]) == 30:
+            if len(db[str(user.id)]["data"]["warnings"][str(ctx.guild.id)]) == 30:
 
                 return await ctx.send(embed = Tools.error(f"{user.name} has the max amount of warnings (30)."))
             
