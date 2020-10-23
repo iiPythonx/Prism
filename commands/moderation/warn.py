@@ -29,7 +29,7 @@ class Warn(commands.Cog):
             
             return await ctx.send(embed = Tools.error("You cannot warn me; I'm a bot."))
     
-        elif reason and len(reason) > 170:
+        elif reason and len(reason) > 115:
             
             return await ctx.send(embed = Tools.error("Your reason is too long."))
         
@@ -51,9 +51,9 @@ class Warn(commands.Cog):
         
         else:
 
-            if len(db[str(user.id)]["data"]["warnings"][str(ctx.guild.id)]) == 30:
+            if len(db[str(user.id)]["data"]["warnings"][str(ctx.guild.id)]) == 15:
 
-                return await ctx.send(embed = Tools.error(f"{user.name} has the max amount of warnings (30)."))
+                return await ctx.send(embed = Tools.error(f"{user.name} has the max amount of warnings (15)."))
             
             db[str(user.id)]["data"]["warnings"][str(ctx.guild.id)].append(f"{ctx.author.mention}: {reason}")
 
