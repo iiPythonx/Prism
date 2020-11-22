@@ -16,34 +16,30 @@ class Balance(commands.Cog):
     @commands.command(aliases = ["bal"])
     async def balance(self, ctx, user: str = None):
 
+        # Just some references
         db = loads(open("db/users", "r").read())
-
         user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
-        if not str(user.id) in db:
-            
+        # Check the user exists
+        if str(user.id) not in db:
+
             return await ctx.send(embed = Tools.error(f"{user.name} doesn't have a Prism account."))
 
         _user = db[str(user.id)]
-
         _bal = _user["balance"]
 
-        if len(str(_bal)) > 50:
+        # Wow, rich kid UwU
+        if len(str(_bal)) > 50: _bal = "∞"
 
-            _bal = "∞"
-
+        # Better references
         balance = f"<:coin:733723405118865479>\t{_bal} coins"
-
         name = user.name + "'s"
 
-        if user.id == ctx.author.id:
+        if user.id == ctx.author.id: name = "Your"
 
-            name = "Your"
-
+        # Embed construction
         embed = discord.Embed(title = f"{name} Balance", description = balance, color = 0x126bf1)
-
         embed.set_author(name = " | Balance", icon_url = self.bot.user.avatar_url)
-
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)

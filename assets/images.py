@@ -29,11 +29,11 @@ def imagefromURL(url):
 def compileGIF(images, duration):
 
     """Compiles raw data into a GIF array"""
-        
+
     arr = io.BytesIO()
-    
+
     images[0].save(arr, "GIF", save_all = True, append_images = images[1:], optimize = False, duration = duration, loop = 0)
-    
+
     arr.seek(0)
 
     return arr

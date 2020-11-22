@@ -6,7 +6,7 @@ log = Logging()
 
 # Master function
 def fetch_value(findKey = None):
-    
+
     data = {}
 
     try:
@@ -25,7 +25,7 @@ def fetch_value(findKey = None):
 
             else:
 
-                if not "=" in line:
+                if "=" not in line:
 
                     log.warn(f"[config.psm (line {lineNo})]: invalid syntax pair")
 
@@ -52,7 +52,7 @@ def fetch_value(findKey = None):
 
                     value = int(value)
 
-                except:
+                except ValueError:
 
                     pass
 
@@ -61,15 +61,15 @@ def fetch_value(findKey = None):
 
             lineNo += 1
 
-    except:
+    except Exception:
 
         pass
-    
+
     if not findKey:
 
         return findKey
 
-    elif not findKey in data:
+    elif findKey not in data:
 
         log.error(f"[config.psm]: no value is named '{findKey}'")
 

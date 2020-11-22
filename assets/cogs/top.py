@@ -15,4 +15,3 @@ class TopGG(commands.Cog):
 # Link to le' bot
 def setup(bot):
     bot.add_cog(TopGG(bot))
-    

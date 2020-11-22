@@ -25,19 +25,19 @@ def server_check(bot, Constants):
   constant = loads(open("db/guilds", "r").read())
 
   data = loads(open("db/guilds", "r").read())
-  
+
   for server in constant:
-      
+
     if not bot.get_guild(int(server)):
-        
+
       data.pop(server)
-          
+
   for server in bot.guilds:
-      
+
     if not str(server.id) in constant:
-          
+
       data[str(server.id)] = Constants.guild_preset
-  
+
   open("db/guilds", "w").write(dumps(data, indent = 4))
 
   data = loads(open("db/users", "r").read())
