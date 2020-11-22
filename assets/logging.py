@@ -5,12 +5,12 @@
 from termcolor import colored
 
 # Main class
-class Logging():
+class Logging(object):
 
     """
 
-        Represents the Prism logging system.
-        This allows you to output errors in a more user-friendly format.
+    Represents the Prism logging system.
+    This allows you to output errors in a more user-friendly format.
 
     """
 

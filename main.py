@@ -1,7 +1,7 @@
 # Prism Discord Bot - Rewrite Edition
 # The only bot you will ever need.
 
-# Last revision: October 3rd, 2020.
+# Last revision: November 21st, 2020.
 # Copyright 2020-20xx MIT; Benjamin O'Brien.
 
 
@@ -17,7 +17,7 @@ bot = Bot()
 
 # Commands
 for command_folder in listdir("commands"):
-  
+
   for command in listdir(f"commands/{command_folder}"):
 
     if command != "__pycache__":
@@ -26,45 +26,45 @@ for command_folder in listdir("commands"):
 
 # Special extensions
 bot.load_extension("assets.cogs.top")
-            
+
 # Bot events
 @bot.event
 async def on_ready():
-    
+
   return Events.on_ready()
-    
+
 @bot.event
 async def on_command_error(ctx, error):
-    
+
   return await Events.error_handler(ctx, error)
 
 @bot.event
 async def on_message(msg):
 
-  if await Events.on_message(msg) != True:
-        
+  if await Events.on_message(msg) is not True:
+
     return
-    
+
   return await bot.process_commands(msg)
 
 @bot.event
 async def on_guild_join(guild):
-    
+
   return Events.guild_add(guild)
 
 @bot.event
 async def on_guild_remove(guild):
-    
+
   return Events.guild_remove(guild)
 
 @bot.event
 async def on_member_join(member):
-    
+
   return await Events.member_joined(member)
 
 @bot.event
 async def on_member_remove(member):
-    
+
   return await Events.member_left(member)
 
 @bot.event
