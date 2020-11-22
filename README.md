@@ -6,7 +6,9 @@
 
 Prism is a multipurpose discord bot focused on entertainment & currency.
 
-It is built in Python using `discord.py`.
+It is built in Python using `discord.py` and multiple other libraries.
+
+For a better storyline and some history, check `assets/prism.py`.
 
 ---
 
