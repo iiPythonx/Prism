@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads, dumps
@@ -16,7 +14,7 @@ class Pay(commands.Cog):
     self.usage = "pay [user] [amount]"
 
   @commands.command()
-  async def pay(self, ctx, user = None, amount = None):
+  async def pay(self, ctx, user: discord.User = None, amount = None):
 
     if not user:
         

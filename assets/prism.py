@@ -489,6 +489,10 @@ class Tools:
 
   async def getClosestUser(ctx, user, return_member = False):
 
+    # Thanks to discord's new intent system, this entire function is broken if you are not verified.
+    # Because of this, we migrated back to discord.User, which is what this now returns.
+    return user
+
     user = str(user).lower()
 
     matcher = StringMatcher()

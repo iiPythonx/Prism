@@ -24,18 +24,16 @@ class Beg(commands.Cog):
         ]
 
     @commands.command()
-    async def beg(self, ctx, member: str = None):
+    async def beg(self, ctx, member: discord.User = None):
 
         user = choice(self.people)
 
         if randint(1, 10) == 1:
-
             user = "Commuter"
 
         if member:
             
             member = await Tools.getClosestUser(ctx, member)
-
             user = member.name
 
         elif Cooldowns.on_cooldown(ctx, "beg"):
@@ -49,9 +47,7 @@ class Beg(commands.Cog):
         db[str(ctx.author.id)]["balance"] += amount
         
         embed = discord.Embed(title = f"You begged {user} for coins and gained {amount} coins.", color = 0x126bf1)
-        
-        embed.set_author(name = " | Beg", icon_url = self.bot.user.avatar_url)
-        
+        embed.set_author(name = " | Beg", icon_url = self.bot.user.avatar_url)    
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
         
         await ctx.send(embed = embed)
