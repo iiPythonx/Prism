@@ -20,16 +20,13 @@ class Avatar(commands.Cog):
     ]
 
   @commands.command(aliases = ["pfp", "picture"])
-  async def avatar(self, ctx, *, user: str = None):
+  async def avatar(self, ctx, *, user: discord.User = None):
 
     user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
     embed = discord.Embed(title = choice(self.options).format(user.name), color = 0x126bf1)
-    
     embed.set_image(url = user.avatar_url)
-    
     embed.set_author(name = " | Avatar", icon_url = self.bot.user.avatar_url)
-    
     embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
     return await ctx.send(embed = embed)

@@ -16,13 +16,9 @@ class Burn(commands.Cog):
         self.usage = "burn [user]"
 
     @commands.command()
-    async def burn(self, ctx, user: str = None):
+    async def burn(self, ctx, user: discord.User = None):
 
-        if not user:
-
-            return await ctx.send(embed = Tools.error("No user specified."))
-
-        user = await Tools.getClosestUser(ctx, user)
+        user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
         # Image initialization
         data = imagefromURL(user.avatar_url).resize((224, 259))

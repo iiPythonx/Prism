@@ -19,16 +19,14 @@ class Roast(commands.Cog):
         ]
 
     @commands.command()
-    async def roast(self, ctx, user = None):
+    async def roast(self, ctx, user: discord.User = None):
 
         if not user:
-            
             return await ctx.send(embed = Tools.error("You expect to roast the air?"))
         
         user = await Tools.getClosestUser(ctx, user)
 
         embed = discord.Embed(title = choice(self.roasts).format(user.name), color = 0x126bf1)
-        
         embed.set_footer(text = f" | Roasted and toasted by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)
