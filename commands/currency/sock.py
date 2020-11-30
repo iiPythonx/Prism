@@ -16,7 +16,7 @@ class Sock(commands.Cog):
     self.usage = "sock [user]"
 
   @commands.command()
-  async def sock(self, ctx, user = None):
+  async def sock(self, ctx, user: discord.User = None):
 
     if Cooldowns.on_cooldown(ctx, "sock"):
 

@@ -6,6 +6,5 @@ termcolor
 youtube-dl
 wolframalpha
 python-dotenv
-discord.py<=1.5
-requests_oauthlib
+discord.py==1.4.2
 python-levenshtein

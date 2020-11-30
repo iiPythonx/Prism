@@ -14,7 +14,7 @@ class Balance(commands.Cog):
         self.usage = "balance [user]"
 
     @commands.command(aliases = ["bal"])
-    async def balance(self, ctx, user: str = None):
+    async def balance(self, ctx, user: discord.User = None):
 
         # Just some references
         db = loads(open("db/users", "r").read())

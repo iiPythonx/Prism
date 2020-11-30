@@ -1,5 +1,3 @@
-# Prism Rewrite - Basic Command
-
 # Modules
 import discord
 from json import loads, dumps
@@ -16,7 +14,7 @@ class Inventory(commands.Cog):
         self.usage = "inventory"
 
     @commands.command(aliases = ["inv"])
-    async def inventory(self, ctx, user = None):
+    async def inventory(self, ctx, user: discord.User = None):
         
         user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 

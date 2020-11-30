@@ -16,7 +16,7 @@ class Rob(commands.Cog):
         self.usage = "rob [user]"
 
     @commands.command(aliases = ["steal"])
-    async def rob(self, ctx, user = None):
+    async def rob(self, ctx, user: discord.User = None):
         
         if Cooldowns.on_cooldown(ctx, "rob"):
             
