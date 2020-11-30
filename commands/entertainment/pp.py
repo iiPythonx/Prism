@@ -16,7 +16,7 @@ class Penis(commands.Cog):
         self.usage = "pp [user]"
 
     @commands.command(aliases = ["penis"])
-    @command.is_nsfw()
+    @commands.is_nsfw()
     async def pp(self, ctx, user: discord.User = None):
 
         db = loads(open("db/guilds", "r").read())
