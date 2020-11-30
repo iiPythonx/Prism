@@ -1,5 +1,6 @@
 # Modules
 import discord
+from os import getenv
 from json import loads
 
 from requests import get
@@ -13,15 +14,15 @@ class Cat(commands.Cog):
         self.desc = "Gets you a random picture of a cat"
         self.usage = "cat"
 
+        self.key = getenv("CAT_KEY")
+
     @commands.command(aliases = ["kitten"])
     async def cat(self, ctx):
-
-        key = "5d9c5db3-d019-4a7d-9b7c-0eda1e8ed772"
 
         url = "https://api.thecatapi.com/v1/images/search"
 
         headers = {
-            "x-api-key": key
+            "x-api-key": self.key
         }
 
         data = loads(get(url, headers = headers).text)

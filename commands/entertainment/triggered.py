@@ -17,13 +17,9 @@ class Triggered(commands.Cog):
         self.usage = "triggered [user]"
 
     @commands.command()
-    async def triggered(self, ctx, user: str = None):
+    async def triggered(self, ctx, user: discord.User = None):
 
-        if not user:
-
-            return await ctx.send(embed = Tools.error("No user specified."))
-
-        user = await Tools.getClosestUser(ctx, user)
+        user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
         # Image initialization
         image = imagefromURL(user.avatar_url).resize((216, 216), Image.ANTIALIAS)
