@@ -30,15 +30,16 @@ from random import choice
 from asyncio import sleep
 from .logging import Logging
 
+from datetime import datetime
 from json import loads, dumps
+
 from os import system, listdir
-
 from .config import fetch_value
+
 from operator import itemgetter
-
 from discord.ext import commands, tasks
-from .functions import clear, server_check
 
+from .functions import clear, server_check
 from Levenshtein.StringMatcher import StringMatcher
 
 # Bot creation
@@ -356,21 +357,21 @@ class Events:
 
   def message_delete(message):
 
-    if len(message.content) > 400:
-
-      return
-
-    elif not message.guild:
-
-      return
+    if len(message.content) > 100: return
+    elif not message.guild: return
+    elif not message.content: return
 
     db = loads(open("db/guilds", "r").read())
+    msgs = db[str(message.guild.id)]["data"]["deleted_messages"]
 
-    if len(db[str(message.guild.id)]["data"]["deleted_messages"]) == 5:
+    if len(msgs) == 10:
+      msgs = msgs[1:]
 
-      db[str(message.guild.id)]["data"]["deleted_messages"] = db[str(message.guild.id)]["data"]["deleted_messages"][1:]
-
-    db[str(message.guild.id)]["data"]["deleted_messages"].append(f"{message.author.mention}: {message.content}")
+    msgs.append({
+      "author": str(message.author),
+      "date": str(datetime.now().strftime("%D %H:%M:%S")) + " CST",
+      "content": message.content
+    })
 
     return open("db/guilds", "w").write(dumps(db, indent = 4))
 
