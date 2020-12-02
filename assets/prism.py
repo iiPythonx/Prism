@@ -95,73 +95,50 @@ class Events:
 
   async def error_handler(ctx, error):
 
-    if ctx.guild and ctx.guild.id in [264445053596991498]:
-
-      return
-
-    elif isinstance(error, commands.BadArgument):
-
+    if isinstance(error, commands.BadArgument):
       return await ctx.send(embed = Tools.error("Unknown (or invalid) argument provided."))
-
     elif isinstance(error, commands.NotOwner):
-
       return await ctx.send(embed = Tools.error("This command is owner-only."))
-
     elif isinstance(error, commands.MissingPermissions):
-
       return await ctx.send(embed = Tools.error(f"You need the {str(error).split('sing ')[1].split(' per')[0]} permission(s) to use this command."))
-
     elif isinstance(error, commands.CommandNotFound):
-
       return
-
     elif "403" in str(error):
-
       try: return await ctx.send(embed = Tools.error("Missing permission(s)."))
       except Exception: pass
-
     elif "NoSuchUser" in str(error):
-
       return await ctx.send(embed = Tools.error("Couldn't find that user."))
 
     embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
 
     if fetch_value("DEBUG"):
-
       embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
 
     try: await ctx.send(embed = embed)
     except Exception: pass
 
     base = ctx.message.content.split(" ")[0] if " " in ctx.message.content else ctx.message.content
-
     return log.error(f"Command `{base}` raised an error: {error}")
 
   async def on_message(message):
 
     ctx, user, db, gdb = message.channel, message.author, loads(open("db/users", "r").read()), loads(open("db/guilds", "r").read())
 
-    if user.bot:
-
-      return
+    if user.bot: return
 
     # We aren't in a guild so process it
     if not message.guild:
 
       command = message.content.lower()
 
-      if not command.startswith("p!"):
-
-        return
+      if not command.startswith("p!"): return
 
       command = command[2:]
 
       if " " in command:
-
         command = command.split(" ")[0]
 
       if command not in ["ping", "help", "uptime", "invite", "stats", "vote", "eval", "load", "reload"]:
-
         return await ctx.send(embed = Tools.error("That command can only be used in a guild."))
 
       return True  # Continue processing the command
@@ -174,14 +151,11 @@ class Events:
     except KeyError:  # KeyError since flake8 hates bare exceptions
 
       gdb[str(message.guild.id)] = Constants.guild_preset
-
       prefix = "p!"
-
       open("db/guilds", "w").write(dumps(gdb, indent = 4))
 
     # Triggers
     if message.content in gdb[str(message.guild.id)]["data"]["triggers"]:
-
       return await ctx.send(gdb[str(message.guild.id)]["data"]["triggers"][message.content])
 
     # Leveling
