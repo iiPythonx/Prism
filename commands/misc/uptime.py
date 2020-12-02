@@ -14,14 +14,17 @@ class Uptime(commands.Cog):
         self.usage = "uptime"
         
         self.start = time.time()
+        self.start_full = datetime.datetime.now().strftime("%D at %H:%M:%S CST")
         
     @commands.command()
     async def uptime(self, ctx):
             
-        embed = discord.Embed(description = str(datetime.timedelta(seconds = int(round(time.time() - self.start)))), color = 0x126bf1)
-
+        embed = discord.Embed(
+            description = str(datetime.timedelta(seconds = int(round(time.time() - self.start)))) + f"\n(online since {self.start_full})",
+            color = 0x126bf1
+        )
+        
         embed.set_author(name = " | Uptime", icon_url = self.bot.user.avatar_url)
-
         embed.set_footer(text = f"Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)
