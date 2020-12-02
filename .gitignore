@@ -9,3 +9,5 @@ db/
 
 # No need for vs code stuff
 .vscode/
+.idea/
+

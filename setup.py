@@ -2,9 +2,11 @@
 # setup.py
 
 # Modules
+from json import dumps
+from shutil import which
+
 from os.path import exists
-from json import loads, dumps
-from os import mkdir, system, name
+from os import mkdir, system
 
 # Initialization
 print("Checking if this release is ready to go...")
@@ -36,7 +38,6 @@ dbltoken = input("DBL token (leave empty if none): ")
 wolfram = input("Wolframalpha key: ")
 
 if not dbltoken:
-
     open("assets/cogs/top.py", "w").write("def setup(bot):\n  pass")
 
 open(".env", "w+").write(f"TOKEN = \"{token}\"\nDBL_TOKEN = \"{dbltoken}\"\n\nWOLFRAMALPHA_KEY = \"{wolfram}\"")
@@ -45,18 +46,14 @@ open(".env", "w+").write(f"TOKEN = \"{token}\"\nDBL_TOKEN = \"{dbltoken}\"\n\nWO
 x = input("Would you like to install dependencies (Y/n)? ")
 
 if x.lower() in ["y", "n", "yes", "no"]:
-
     if x.lower() in ["yes", "y"]:
 
         python = "python"
-
-        if name != "nt":
-
+        if which("python3"):
             python += "3"
 
         system(f"{python} -m pip install -r requirements.txt")
 
 # Finish up
 print()
-
 print("Prism should be ready to launch.")
