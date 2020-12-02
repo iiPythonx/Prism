@@ -3,8 +3,8 @@ psutil
 pillow
 requests
 termcolor
+discord.py
 youtube-dl
 wolframalpha
 python-dotenv
-discord.py==1.4.2
 python-levenshtein
