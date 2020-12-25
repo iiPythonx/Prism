@@ -95,6 +95,8 @@ class Events:
       return await ctx.send(embed = Tools.error("This command is owner-only."))
     elif isinstance(error, commands.MissingPermissions):
       return await ctx.send(embed = Tools.error(f"You need the {str(error).split('sing ')[1].split(' per')[0]} permission(s) to use this command."))
+    elif isinstance(error, commands.NSFWChannelRequired):
+      return await ctx.send(embed = Tools.error("That command is for NSFW channels only."))
     elif isinstance(error, commands.CommandNotFound):
       return
     elif "403" in str(error):
@@ -106,7 +108,7 @@ class Events:
     embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
 
     if "--debug" in argv:
-      embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
+      embed.add_field(name = "\nTechnical Information", value = f"```py\n[{type(error)}]: {error}\n```", inline = False)
 
     try: await ctx.send(embed = embed)
     except Exception: pass

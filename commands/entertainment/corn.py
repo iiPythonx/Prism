@@ -11,7 +11,6 @@ class Corn(commands.Cog):
 
     @commands.command()
     async def corn(self, ctx):
-
         return await ctx.send(":corn:")
 
 # Link to bot

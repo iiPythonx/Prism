@@ -19,7 +19,7 @@ class Avatar(commands.Cog):
       "{} is looking good today."
     ]
 
-  @commands.command(aliases = ["pfp", "picture"])
+  @commands.command(aliases = ["pfp", "picture", "ava"])
   async def avatar(self, ctx, *, user: discord.User = None):
 
     user = await Tools.getClosestUser(ctx, user if user else ctx.author)

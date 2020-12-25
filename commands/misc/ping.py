@@ -14,30 +14,21 @@ class Ping(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-            
-        api = round(self.bot.latency * 1000)
-        
+
+        # Locate our bot latency
+        bot = round(self.bot.latency * 1000)
+
+        # Identify our API ping
         first = datetime.now()
-
         msg = await ctx.send("This is a message used to calculate ping time.")
+        api = round((datetime.now() - first).total_seconds() * 1000)
 
-        bot = str(datetime.now() - first).split(".")[1][:2]
-
-        try:
-
-            await msg.delete()
-
-        except:
-
-            pass
-        
-        embed = discord.Embed(title = "Pong!", description = f"API Ping: {api}ms.\nBot Ping: {bot}ms.", color = 0x126bf1)
-        
+        # Edit message
+        embed = discord.Embed(title = "Pong!", description = f"API Ping: {api}ms\nBot Ping: {bot}ms\nRoundtrip: {api + bot}ms", color = 0x126bf1)
         embed.set_author(name = " | Ping", icon_url = self.bot.user.avatar_url)
-        
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
         
-        return await ctx.send(embed = embed)
+        return await msg.edit(content = None, embed = embed)
 
 # Link to bot
 def setup(bot):

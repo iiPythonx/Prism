@@ -1,7 +1,6 @@
 # Modules
 import discord
 from os import getenv
-from json import loads
 
 from requests import get
 from discord.ext import commands
@@ -25,14 +24,12 @@ class Cat(commands.Cog):
             "x-api-key": self.key
         }
 
-        data = loads(get(url, headers = headers).text)
+        data = get(url, headers = headers).json()
 
+        # Embed construction
         embed = discord.Embed(color = 0x126bf1)
-        
         embed.set_image(url = data[0]["url"])
-        
         embed.set_author(name = " | Cat", icon_url = self.bot.user.avatar_url)
-        
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)

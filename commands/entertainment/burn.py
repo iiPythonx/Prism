@@ -22,15 +22,12 @@ class Burn(commands.Cog):
 
         # Image initialization
         data = imagefromURL(user.avatar_url).resize((224, 259))
-
         im = Image.open("assets/images/spongebob_burn.png")
-
-        cnv = Image.new(mode = "RGB", color = (0,0,0), size = im.size)
+        cnv = Image.new(mode = "RGB", color = (0, 0, 0), size = im.size)
 
         # Rendering
         cnv.paste(data, (29, 58))
-
-        cnv.paste(im, (0,0), im)
+        cnv.paste(im, (0, 0), im)
 
         # Send the image
         return await ctx.send(file = discord.File(compile(cnv), "burn.png"))
