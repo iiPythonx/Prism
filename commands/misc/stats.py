@@ -11,9 +11,6 @@ import platform
 from datetime import datetime
 from discord.ext import commands
 
-# Constants
-uptime_start = datetime.now()
-
 # Main Command Class
 class Stats(commands.Cog):
 
@@ -22,14 +19,14 @@ class Stats(commands.Cog):
     self.desc = "Check out Prism's statistics"
     self.usage = "stats"
 
+    self.uptime_start = datetime.now()
+
   def scale_size(self, bytes, suffix = "B"):
 
     factor = 1024
 
     for unit in ["", "K", "M", "G", "T", "P"]:
-
       if bytes < factor:
-
         return f"{bytes:.2f}{unit}{suffix}"
 
       bytes /= factor
@@ -37,34 +34,28 @@ class Stats(commands.Cog):
   @commands.command(aliases = ["statistics", "bot"])
   async def stats(self, ctx):
 
+    # Locate our usage per core
     percore_usage = ""
-
     for i, percentage in enumerate(psutil.cpu_percent(percpu = True, interval = 1)):
+      percore_usage += f"{percentage}% "
 
-      percore_usage = f"{percore_usage}\tCore #{i + 1}: {percentage}%\n"
-
+    # Load lots of information
     bt = datetime.fromtimestamp(psutil.boot_time()).strftime("%D %I:%M %p")
-
     uname = platform.uname()
-
     svmem = psutil.virtual_memory()
 
-    cpufreq = psutil.cpu_freq()
+    cpu = psutil.cpu_freq()
 
+    # Create embed
     embed = discord.Embed(title = "Prism Statistics", color = 0x126bf1)
 
     embed.add_field(
       name = "Bot Information",
       value = f"""```
         Guild Count: {len(self.bot.guilds)}
-        Member Count: {len(self.bot.users)}
         Command Count: {len(self.bot.commands)}
 
-        Latency: {round(self.bot.latency * 1000)}ms
-
-        Staff Member(s):
-          - iiPython#0768 (Developer)
-          - Commuter#4083 (Management)```
+        Bot latency: {round(self.bot.latency * 1000)}ms```
       """.replace("  ", ""),
       inline = False
     )
@@ -81,11 +72,13 @@ class Stats(commands.Cog):
     embed.add_field(
       name = "Processor Information",
       value = f"""```
-        Physical: {psutil.cpu_count(logical = False)} | Total: {psutil.cpu_count(logical = True)}
-        Frequency: {cpufreq.current:.2f}Mhz
+        Physical cores: {psutil.cpu_count(logical = False)} | Total cores: {psutil.cpu_count(logical = True)}
+        Maximum frequency: {round(cpu.max / 1000, 1)}GHz
+        Current frequency: {round(cpu.current / 1000, 1)}GHz
 
         Core Usage:
         {percore_usage}
+
         CPU Usage: {psutil.cpu_percent()}%```
       """.replace("  ", ""),
       inline = False
@@ -103,8 +96,8 @@ class Stats(commands.Cog):
     embed.add_field(
       name = "Other Information",
       value = f"""```
-        Python Version: {str(sys.version).split(" ")[0]}
-        Discord.py Version: {discord.__version__}
+        Python version: {platform.python_version()}
+        Library version: {discord.__version__}
 
         Time requested: {datetime.now().strftime("%D %I:%M:%S %p")} CST```
       """.replace("  ", ""),
@@ -112,7 +105,6 @@ class Stats(commands.Cog):
     )
 
     embed.set_author(name = " | Statistics", icon_url = self.bot.user.avatar_url)
-
     embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
     return await ctx.send(embed = embed)
