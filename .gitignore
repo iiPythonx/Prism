@@ -1,12 +1,13 @@
-# Rid of the pycache
+# Hide cache
 __pycache__/
 
-# HIDE THE .ENV AAAAAAAAA
+# Hide secrets
 .env
+.git/
 
-# Please dont track the dbs plz :)
+# Database files
 db/
 
-# No need for vs code stuff
-.vscode/
+# IDE settings
 .idea/
+.vscode/

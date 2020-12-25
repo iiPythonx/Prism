@@ -2,11 +2,13 @@
 # setup.py
 
 # Modules
+import subprocess
+from os import mkdir
+
 from json import dumps
 from shutil import which
 
 from os.path import exists
-from os import mkdir, system
 
 # Initialization
 print("Checking if this release is ready to go...")
@@ -46,7 +48,7 @@ if x.lower() in ["y", "n", "yes", "no"]:
         if which("python3"):
             python += "3"
 
-        system(f"{python} -m pip install -U -r requirements.txt")
+        subprocess.run([python, "-m", "pip", "install", "-U", "-r", "requirements.txt"])
 
 # Finish up
 print()
