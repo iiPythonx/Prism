@@ -5,5 +5,9 @@ ignore = E111, E114, E121, E251, E302, E305, E402, E501, E701, H202, H301, H306,
 exclude =
   .git,
   .vscode,
+  assets/fonts,
+  assets/images,
+  assets/res,
+  db,
   __pycache__
   
