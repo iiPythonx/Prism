@@ -2,6 +2,7 @@
 # Licensed under the MIT license.
 
 # Modules
+import sys
 from termcolor import colored
 
 # Main class
@@ -31,7 +32,6 @@ class Logging(object):
         self.errors += 1
 
         if "exception" in e:
-
             return print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
 
         return print(colored(f"[ERROR]: {e}", "red"))
@@ -48,12 +48,10 @@ class Logging(object):
         """
 
         if "exception" in e:
-
             print(colored(f"[ERROR]: {e.split('exception: ')[1]}", "red"))
 
         print(colored(f"[ERROR]: {e}", "red"))
-
-        exit()
+        sys.exit()
 
     def warn(self, e):
 
@@ -65,7 +63,6 @@ class Logging(object):
         """
 
         self.warnings += 1
-
         return print(colored(f"[WARN]: {e}", "yellow"))
 
     def inform(self, e):

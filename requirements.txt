@@ -4,7 +4,6 @@ pillow
 requests
 termcolor
 discord.py
-youtube-dl
 wolframalpha
 python-dotenv
 python-levenshtein
