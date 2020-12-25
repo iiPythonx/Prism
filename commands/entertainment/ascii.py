@@ -16,25 +16,21 @@ class Ascii(commands.Cog):
   async def ascii(self, ctx, *, sentence: str = None):
     
     if not sentence:
-        
       return await ctx.send(embed = Tools.error("No text was specified."))
 
-    elif sentence.startswith("<@!") and sentence.endswith(">"):
-
-      sentence = self.bot.get_user(int(sentence.split("<@!")[1].split(">")[0])).name
+    for mention in ctx.message.mentions:
+      sentence = sentence.replace(f"<@{mention.id}>", mention.name)
+      sentence = sentence.replace(f"<@!{mention.id}>", mention.name)  # Fallback
 
     text = f"``{get(f'http://artii.herokuapp.com/make?text={sentence}').text}``"
 
     if text == "````":
-
       return await ctx.send(embed = Tools.error("Your text contains unsupported characters."))
 
     try:
-
       return await ctx.send(text)
 
-    except:
-
+    except Exception:
       return await ctx.send(embed = Tools.error("Your text was too long to turn into ascii art."))
 
 # Link to bot

@@ -27,16 +27,17 @@ if not exists("db/guilds"):
     print("\tcreated guilds database")
 
 # Setup .env file
-print()
+if not exists(".env"):
+    print()
 
-token = input("Bot token: ")
-dbltoken = input("DBL token (leave empty if none): ")
-wolfram = input("Wolframalpha key: ")
+    token = input("Bot token: ")
+    dbltoken = input("DBL token (leave empty if none): ")
+    wolfram = input("Wolframalpha key: ")
 
-if not dbltoken:
-    open("assets/cogs/top.py", "w").write("def setup(bot):\n  pass")
+    if not dbltoken:
+        open("assets/cogs/top.py", "w").write("def setup(bot):\n  pass")
 
-open(".env", "w+").write(f"TOKEN = \"{token}\"\nDBL_TOKEN = \"{dbltoken}\"\n\nWOLFRAMALPHA_KEY = \"{wolfram}\"")
+    open(".env", "w+").write(f"TOKEN = \"{token}\"\nDBL_TOKEN = \"{dbltoken}\"\n\nWOLFRAMALPHA_KEY = \"{wolfram}\"")
 
 # Install dependencies
 x = input("Would you like to install dependencies (Y/n)? ")

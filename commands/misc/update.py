@@ -1,8 +1,10 @@
 # Modules
 import discord
-from requests import get
+import requests
 
+from json import loads
 from assets.prism import Tools
+
 from discord.ext import commands
 
 # Main Command Class
@@ -14,6 +16,7 @@ class Update(commands.Cog):
         self.usage = "update"
 
         self.url = "https://api.github.com/repos/ii-Python/Prism/commits"
+        self.config = loads(open("config.json", "r").read())
 
     @commands.command()
     async def update(self, ctx):
@@ -21,21 +24,19 @@ class Update(commands.Cog):
         await ctx.send(embed = discord.Embed(title = "Fetching commits...", color = 0x126bf1), delete_after = 0)
         
         try:
-            r = get(self.url, timeout = 2).json()
+            r = requests.get(self.url, timeout = 2).json()
 
-            try: await m.delete()
-            except: pass
-        
-        except:
+        except requests.exceptions.ConnectionError:
             return await ctx.send(embed = Tools.error("Sorry, something went wrong while fetching updates."))
 
         commit = r[0]
         _commit = commit["commit"]
-        verification = f":white_check_mark:" if _commit["verification"]["verified"] else ":x:"
+        verification = ":white_check_mark:" if _commit["verification"]["verified"] else ":x:"
 
+        # Embed construction
         embed = discord.Embed(
-            title = "Latest update: " + _commit["message"][0].lower() + _commit["message"][1:],
-            description = "Click [here](https://github.com/ii-Python/Prism/commits) to view previous updates.",
+            title = f"Running Prism {self.config['release']}",
+            description = f"Latest github push: {_commit['message']}\nClick [here](https://github.com/ii-Python/Prism/commits) to view previous updates.",
             url = "https://github.com/ii-Python/Prism/commit/" + _commit["url"].split("/")[-1],
             color = 0x126bf1
         )

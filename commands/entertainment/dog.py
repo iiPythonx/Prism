@@ -16,12 +16,10 @@ class Dog(commands.Cog):
     @commands.command(aliases = ["doggo", "puppy"])
     async def dog(self, ctx):
 
+        # Construct embed
         embed = discord.Embed(color = 0x126bf1)
-        
         embed.set_image(url = loads(get("https://dog.ceo/api/breeds/image/random").text)["message"])
-        
         embed.set_author(name = " | Dog", icon_url = self.bot.user.avatar_url)
-        
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)

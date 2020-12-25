@@ -14,17 +14,14 @@ class Clap(commands.Cog):
     async def clap(self, ctx, *, sentence: str = None):
 
         if not sentence:
-            
             return await ctx.send(embed = Tools.error("No text specified to clap"))
 
         clapped_text = sentence.replace(" ", " :clap: ")
 
         try:
-
             return await ctx.send(clapped_text)
 
-        except:
-
+        except Exception:
             return await ctx.send(embed = Tools.error("That's too much text to clap."))
 
 # Link to bot

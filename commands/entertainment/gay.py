@@ -21,24 +21,23 @@ class Gayness(commands.Cog):
 
     db = loads(open("db/guilds", "r").read())
 
-    if not "nsfw-enabled" in db[str(ctx.guild.id)]["tags"]:
+    if "nsfw-enabled" not in db[str(ctx.guild.id)]["tags"]:
       return await ctx.send(embed = Tools.error("NSFW is not enabled in this server."))
 
     user = await Tools.getClosestUser(ctx, user if user else ctx.author)
 
     rating = randint(0, 100)
-
     message = f"You are {rating}% gay."
     
     if ctx.author.id != user.id:
       message = f"{user.name} is {rating}% gay."
         
+    # Embed
     embed = discord.Embed(title = message, color = 0x126bf1)
-    embed.set_author(name = " | Gay", icon_url = self.bot.user.avatar_url)
     embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
     return await ctx.send(embed = embed)
 
 # Link to bot
 def setup(bot):
-    bot.add_cog(Gayness(bot)) 
+  bot.add_cog(Gayness(bot))
