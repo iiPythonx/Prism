@@ -12,22 +12,16 @@ from os import mkdir, system
 print("Checking if this release is ready to go...")
 
 if not exists("db"):
-
     mkdir("db")
-
     print("\tcreated database folder")
 
 # Setup folders
 if not exists("db/users"):
-
     open("db/users", "w+").write(dumps({}))
-
     print("\tcreated users database")
 
 if not exists("db/guilds"):
-
     open("db/guilds", "w+").write(dumps({}))
-
     print("\tcreated guilds database")
 
 # Setup .env file
@@ -52,7 +46,7 @@ if x.lower() in ["y", "n", "yes", "no"]:
         if which("python3"):
             python += "3"
 
-        system(f"{python} -m pip install -r requirements.txt")
+        system(f"{python} -m pip install -U -r requirements.txt")
 
 # Finish up
 print()

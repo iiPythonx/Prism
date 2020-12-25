@@ -25,16 +25,16 @@
 
 # Modules
 import discord
+from sys import argv
+
 from random import choice
-
 from asyncio import sleep
+
 from .logging import Logging
-
 from datetime import datetime
-from json import loads, dumps
 
+from json import loads, dumps
 from os import system, listdir
-from .config import fetch_value
 
 from operator import itemgetter
 from discord.ext import commands, tasks
@@ -71,21 +71,15 @@ class Events:
     clear()
 
     print(f"Logged in as {bot.user}.")
-
     print(f"-------------{'-' * len(str(bot.user))}-")
-
     print()
 
     # Basic server checking
     # This insures that a server is registered if it added Prism during a downtime.
     server_check(bot, Constants)
 
-    # Check that our config file is valid
-    fetch_value()
-
     # Start our 15-minute status changer
     try:
-
       return Tools.status_change.start()
 
     except Exception as err:  # I forgot which exception is raised here
@@ -111,7 +105,7 @@ class Events:
 
     embed = discord.Embed(title = "Unexpected Error", description = "The command you just used generated an unexpected error.\nPrism has sent an automatic bug report about this problem.\n\nIn the meantime, try some of our other commands. :)", color = 0xFF0000)
 
-    if fetch_value("DEBUG"):
+    if "--debug" in argv:
       embed.add_field(name = "\nTechnical Information", value = f"```py\n{error}\n```", inline = False)
 
     try: await ctx.send(embed = embed)
@@ -130,7 +124,6 @@ class Events:
     if not message.guild:
 
       command = message.content.lower()
-
       if not command.startswith("p!"): return
 
       command = command[2:]
