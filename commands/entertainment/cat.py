@@ -13,7 +13,7 @@ class Cat(commands.Cog):
         self.desc = "Gets you a random picture of a cat"
         self.usage = "cat"
 
-        self.key = getenv("CAT_KEY")
+        self.key = getenv("CATAPI_KEY")
 
     @commands.command(aliases = ["kitten"])
     async def cat(self, ctx):
