@@ -6,20 +6,40 @@
 
 
 # Modules
+import sys
 from prism import Prism
 from os import getenv, listdir
 
 # Initialization
 bot = Prism()
 
-# Commands
-# for command_folder in listdir("commands"):
-#     for command in listdir(f"commands/{command_folder}"):
-#         if command.endswith(".py"):
-#             bot.load_extension(f"commands.{command_folder}.{command[:-3]}")
+# Command loader
+for command_folder in listdir("commands"):
+
+    # Loop through command category
+    for command in listdir(f"commands/{command_folder}"):
+
+        # Check for a python file
+        if command.endswith(".py"):
+
+            # Ensure we can load
+            if "--no-commands" in sys.argv:
+                continue
+
+            # Load command
+            bot.load_extension(f"commands.{command_folder}.{command[:-3]}")
 
 # Special extensions
-# bot.load_extension("prism.cogs.top")
+if "--no-special-ext" not in sys.argv:
+
+    # Loop through our externals
+    for external in listdir("prism/externals"):
+
+        # Check its a python file
+        if external.endswith(".py"):
+
+            # Load extension
+            bot.load_extension(f"prism.externals.{external[:-3]}")
 
 # Bot events
 @bot.event

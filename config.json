@@ -1,8 +1,12 @@
 {
-    "release": "v1.0.4 LTS",
+    "release": "v1.0.4 CTB-2",
     "maintainer": {
         "display": "iiPython",
         "account": "iiPython#0768"
     },
-    "invite_url": "KhvXWTr"
+    "invite_url": "KhvXWTr",
+    "owner_ids": [
+        633185043774177280,
+        666839157502378014
+    ]
 }
