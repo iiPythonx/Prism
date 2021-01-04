@@ -96,6 +96,29 @@ class Database(commands.Cog):
 
         # Set value
         if value is not None:
+
+            # Convert value
+            try:
+                value = int(value)
+
+            except ValueError:
+
+                try:
+                    value = float(value)
+
+                except ValueError:
+
+                    try:
+                        value = bool(value)
+
+                    except ValueError:
+
+                        try:
+                            value = dict(value)
+
+                        except ValueError:
+                            pass
+
             self.set_db_value(db, key_struct, value)
 
             # Save database
