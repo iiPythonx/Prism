@@ -99,7 +99,7 @@ class Database(commands.Cog):
             self.set_db_value(db, key_struct, value)
 
             # Save database
-            with open(db_name) as file:
+            with open(db_name, "w") as file:
                 file.write(json.dumps(db, indent = 4))
 
         # Construct information embed
