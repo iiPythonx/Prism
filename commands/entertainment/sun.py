@@ -11,7 +11,7 @@ class Sun(commands.Cog):
         self.bot = bot
         self.desc = "Gets you a random picture of the sun"
         self.usage = "sun"
-        
+
         self.images = [
             "https://www.universetoday.com/wp-content/uploads/2014/09/sun1.jpg",
             "https://apod.nasa.gov/apod/image/1907/SpotlessSunIss_Colacurcio_2048.jpg",
@@ -32,11 +32,8 @@ class Sun(commands.Cog):
     async def sun(self, ctx):
 
         embed = discord.Embed(color = 0x126bf1)
-        
         embed.set_image(url = choice(self.images))
-        
         embed.set_author(name = " | Sun", icon_url = self.bot.user.avatar_url)
-        
         embed.set_footer(text = f" | Requested by {ctx.author}.", icon_url = ctx.author.avatar_url)
 
         return await ctx.send(embed = embed)

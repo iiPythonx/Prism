@@ -1,56 +1,187 @@
-# Copyright 2020-20xx; Benjamin O'Brien (iiPython)
-# setup.py
-
 # Modules
-import subprocess
-from os import mkdir
+import os
+import sqlite3
 
-from json import dumps
+import subprocess
 from shutil import which
 
-from os.path import exists
+from os.path import exists, isdir, isfile
 
 # Initialization
-print("Checking if this release is ready to go...")
+print("Setup is initializing, please wait...")
 
-if not exists("db"):
-    mkdir("db")
-    print("\tcreated database folder")
+CS_PYTHONS = ["python", "python3", "python3.7", "python3.8", "python3.9"]
+CS_USERDB  = """
+CREATE TABLE IF NOT EXISTS users (
+    id long,
+    balance integer,
 
-# Setup folders
-if not exists("db/users"):
-    open("db/users", "w+").write(dumps({}))
-    print("\tcreated users database")
+    level integer,
+    experience integer,
+    reputation integer
 
-if not exists("db/guilds"):
-    open("db/guilds", "w+").write(dumps({}))
-    print("\tcreated guilds database")
+    biography text,
+    blacklisted boolean
+)
+"""
+CS_GUILDDB = """
+CREATE TABLE IF NOT EXISTS guilds (
+    id long,
+    prefix text,
 
-# Setup .env file
-if not exists(".env"):
-    print()
+    nsfw boolean,
+    levels boolean,
+    errors boolean,
+    commandnotfound boolean,
 
-    token = input("Bot token: ")
-    dbltoken = input("DBL token (leave empty if none): ")
-    wolfram = input("Wolframalpha key: ")
+    joinleave long,
+    lastupdated text
+)
+"""
+CS_PETDB   = """
+CREATE TABLE IF NOT EXISTS pets (
+    name text,
+    type text,
 
-    if not dbltoken:
-        open("assets/cogs/top.py", "w").write("def setup(bot):\n  pass")
+    level integer,
+    holding integer,
 
-    open(".env", "w+").write(f"TOKEN = \"{token}\"\nDBL_TOKEN = \"{dbltoken}\"\n\nWOLFRAMALPHA_KEY = \"{wolfram}\"")
+    adopted text,
+    owner integer
+)
+"""
+CS_DOTENV  = """# Tokens
+BOT_TOKEN   = "{}"
+DBL_TOKEN   = "{}"
 
-# Install dependencies
-x = input("Would you like to install dependencies (Y/n)? ")
+# API Keys
+WOLFRAM_KEY = "{}"
+CATAPI_KEY  = "{}"
+GIPHY_KEY   = "{}"
+"""
 
-if x.lower() in ["y", "n", "yes", "no"]:
-    if x.lower() in ["yes", "y"]:
+# Clear function
+def clear():
 
-        python = "python"
-        if which("python3"):
-            python += "3"
+    command = "clear"
+    if os.name == "nt":
+        command = "cls"
 
-        subprocess.run([python, "-m", "pip", "install", "-U", "-r", "requirements.txt"])
+    subprocess.run([command], shell = True)
 
-# Finish up
+# Locate python command
+py = CS_PYTHONS[0]
+for python_command in CS_PYTHONS:
+    if which(python_command):
+        py = python_command
+
+# Clear screen
+clear()
+
+# ===== DATABASE INITIALIZATION =====
+print("Checking the database is setup...")
+
+# Check for the folder
+if not isdir("db"):
+
+    # Remove file-version
+    if isfile("db"):
+        os.remove("db")
+
+    # Create database folder
+    os.mkdir("db")
+
+    # Log
+    print(" ", "created database folder")
+
+else:
+    print(" ", "folder already exists")
+
+# Check for the databases
+def initialize_db(filename, command):
+
+    # Handle connection
+    connection = sqlite3.connect("db/" + filename)
+    cursor = connection.cursor()
+
+    # Initialization
+    cursor.execute(command)
+
+    # Save database
+    connection.commit()
+    connection.close()
+
+initialize_db("users.db", CS_USERDB)
+initialize_db("guilds.db", CS_GUILDDB)
+initialize_db("pets.db", CS_PETDB)
+
+print(" ", "databases initialized")
+
+# ===== .ENV INITIALIZATION =====
 print()
-print("Prism should be ready to launch.")
+
+def setup_dotenv():
+
+    # Introduction
+    print("Setting up .env file now.")
+    print("=" * 50)
+
+    # Grab values
+    bot_token = input("Bot token (discord.com/developers/applications): ")
+    dbl_token = input("Top.gg token (optional): ")
+
+    wolf_key  = input("WolframAlpha API key (developer.wolframalpha.com/portal/myapps): ")
+    cat_key   = input("CatAPI API key (thecatapi.com/signup): ")
+    giphy_key = input("Giphy API key (developers.giphy.com/dashboard): ")
+
+    # Substitute
+    with open(".env", "w+") as file:
+        file.write(CS_DOTENV.format(
+            bot_token,
+            dbl_token,
+            wolf_key,
+            cat_key,
+            giphy_key
+        ))
+
+    # Log
+    print()
+    print("Successfully configured .env file.")
+
+# Check if we should setup our .env file
+if not exists(".env"):
+    setup_dotenv()
+
+else:
+
+    # It already exists, should we overwrite?
+    print("Setup has detected an existing .env file.")
+    x = input("Should we reconfigure it? (y/N): ")
+
+    if x and x.lower() in ["yes", "y"]:
+        print()
+        setup_dotenv()
+
+print()
+
+# ===== DEPENDENCIES INITIALIZATION =====
+print("Prism uses a requirements.txt file to contain dependencies.")
+print("If you want, this setup file can automatically install these.")
+
+# Confirmation
+x = input("Install dependencies? (y/N): ")
+if x and x.lower() in ["y", "yes"]:
+
+    print()
+    print("Installing dependencies from requirements file...")
+
+    # Execute command
+    subprocess.run(
+        [py, "-m", "pip", "install", "-U", "-r", "requirements.txt"],
+        stdout = subprocess.PIPE  # Hide stupid output
+    )
+
+# ===== INSTALL COMPLETION =====
+print()
+print("The setup file has finished setting up Prism.")
+print("You can now launch it with", py + " main.py")
