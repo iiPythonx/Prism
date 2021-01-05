@@ -1,4 +1,8 @@
+# Modules
+import colorama
+
 # Color initialization
+colorama.init()
 colors = {
     "red": "\033[91m",
     "green": "\033[92m",

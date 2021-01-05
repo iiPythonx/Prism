@@ -40,15 +40,16 @@ class Prism(commands.Bot):
         self.release = config["release"]
         self.owner_ids = config["owner_ids"]
 
-    def locate_prefix(self):
+    def locate_prefix(self, bot, message):
         return "p2!"  # Temporary solution
 
     def get_prism_guild(self, guild_id):
 
         # Try to get guild
-        guild = self.database.get_row_by_key("guilds", "id", guild_id)
+        guild = self.database.get_value("guilds", "id", guild_id)
         if guild is None:
             return None
 
+        print(f"{guild_id} exists, skipping registration...")
         # Return our guild
-        return self.get_guild(guild[0])
+        return self.get_guild(guild["id"])

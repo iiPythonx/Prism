@@ -25,6 +25,8 @@ class PrismDB(object):
 
                 # Connect to database
                 conn = sqlite3.connect("db/" + file)
+                conn.row_factory = self.__todict__
+
                 cursor = conn.cursor()
 
                 # Register database
@@ -51,6 +53,18 @@ class PrismDB(object):
 
         # Clear database list
         self.dbs = {}
+
+    def __todict__(self, cursor, row):
+
+        """Converts the default tuple returned from sqlite3 queries into dictionaries"""
+
+        # Taken from https://stackoverflow.com/questions/3300464/how-can-i-get-dict-from-sqlite-query
+        d = {}
+
+        for idx, col in enumerate(cursor.description):
+            d[col[0]] = row[idx]
+
+        return d
 
     def locate_db(self, db):
 
@@ -82,16 +96,33 @@ class PrismDB(object):
         # Master execution
         db["cursor"].execute(f"DELETE FROM {db_name} WHERE {key}=?", (value,))
 
-    def get_row_by_key(self, db_name, key, value):
+    def get_values(self, db_name):
 
-        """Loops through the given database and returns the row containing key set to value."""
+        """Returns a list of values inside of the database"""
 
         # Locate database
         db = self.locate_db(db_name)
 
         # Loop through rows
-        for row in db["cursor"].execute(f"SELECT * FROM {db_name} WHERE {key}=?", (value,)):
-            return row
+        rows = []
+        for row in db["cursor"].execute(f"SELECT * FROM {db_name}"):
+            rows.append(row)
+
+        # Return our values
+        return rows
+
+    def get_value(self, db_name, key, value):
+
+        """Loops through the given database and returns the row containing key set to value."""
+
+        # Load values from database
+        values = self.get_values(db_name)
+
+        # Loop through values
+        for val in values:
+
+            if val[key] == value:
+                return val
 
         # No record
         return None
