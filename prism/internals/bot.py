@@ -1,12 +1,18 @@
 # Modules
 import json
+import discord
+
 from .events import Events
-
 from .core import Internals
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 from discord.ext import commands
+
 from ..utils.logging import Logging
+
+# Intent management
+intents = discord.Intents.default()
+intents.members = True
 
 # Prism class
 class Prism(commands.Bot):
@@ -15,7 +21,8 @@ class Prism(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix = self.locate_prefix,
-            case_insensitive = True
+            case_insensitive = True,
+            intents = intents
         )
 
         self.remove_command("help")  # Remove default help command
@@ -53,3 +60,13 @@ class Prism(commands.Bot):
         print(f"{guild_id} exists, skipping registration...")
         # Return our guild
         return self.get_guild(guild["id"])
+
+    def get_prefix_for(self, guild_id):
+
+        # Locate guild
+        guild = self.database.get_value("guilds", "id", guild_id)
+        if guild is None:
+            return None
+
+        # Return our prefix
+        return guild["prefix"]

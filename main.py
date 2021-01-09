@@ -1,12 +1,13 @@
 # Prism Discord Bot - Rewrite Edition
 # The only bot you will ever need.
 
-# Last revision: January 1st, 2021.
+# Last revision: January 9th, 2021.
 # Copyright 2020-20xx MIT; iiPython, see LICENSE for more details.
 
 
 # Modules
 import sys
+import discord
 from prism import Prism
 from os import getenv, listdir
 
@@ -86,4 +87,8 @@ if token is None:
     print("No token is inside of the .env file, quitting.")
     exit()
 
-bot.run(token, reconnect = True)
+try:
+    bot.run(token, reconnect = True)
+
+except discord.errors.PrivilegedIntentsRequired:
+    print("Please enable the SERVER MEMBERS intent at https://discord.com/developers/applications/")

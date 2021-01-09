@@ -33,7 +33,9 @@ class Events(object):
             return
 
         # Check our prefix
-        print("check prefix here")
+        prefix = self.bot.get_prefix_for(message.guild.id)
+        if not message.content or not message.content.startswith(prefix):
+            return
 
         return True
 
